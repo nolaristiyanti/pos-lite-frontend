@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import {
   getCategories,
   createCategory,
+  updateCategory,
+  deleteCategory,
 } from "../api/categoryApi";
 
 import CategoryFormModal from "../components/CategoryFormModal";
@@ -30,6 +32,12 @@ export default function CategoryPage() {
   const [formData, setFormData] = useState({
     name: "",
   });
+
+  const [isEditMode, setIsEditMode] =
+  useState(false);
+
+  const [selectedCategoryId, setSelectedCategoryId] =
+  useState(null);
 
   const fetchCategories = async (
     page = 1,
@@ -70,41 +78,59 @@ export default function CategoryPage() {
     }
   };
 
-  const handleCreateCategory = async (e) => {
+  const handleSubmitCategory = async (e) => {
     e.preventDefault();
-
+  
     if (!formData.name.trim()) {
       alert("Category name is required");
       return;
     }
-
+  
     try {
       setSubmitLoading(true);
-
-      await createCategory(formData);
-
+  
+      if (isEditMode) {
+        await updateCategory(
+          selectedCategoryId,
+          formData
+        );
+  
+        setSuccessMessage(
+          "Category updated successfully"
+        );
+      } else {
+        await createCategory(formData);
+  
+        setSuccessMessage(
+          "Category created successfully"
+        );
+      }
+  
       setShowModal(false);
-
+  
       setFormData({
         name: "",
       });
-
-      setSuccessMessage(
-        "Category created successfully"
-      );
-
+  
+      setIsEditMode(false);
+      setSelectedCategoryId(null);
+  
       fetchCategories(
         currentPage,
         search
       );
-
+  
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
     } catch (error) {
       console.error(error);
-
-      alert("Failed to create category");
+  
+      alert(
+        isEditMode
+          ? "Failed to update category"
+          : "Failed to create category"
+      );
     } finally {
       setSubmitLoading(false);
     }
@@ -122,6 +148,48 @@ export default function CategoryPage() {
     setCurrentPage(1);
 
     fetchCategories(1, value);
+  };
+
+  const handleEdit = (category) => {
+    setIsEditMode(true);
+  
+    setSelectedCategoryId(
+      category.id
+    );
+  
+    setFormData({
+      name: category.name,
+    });
+  
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+  
+    if (!confirmed) return;
+  
+    try {
+      await deleteCategory(id);
+  
+      setSuccessMessage(
+        "Category deleted successfully"
+      );
+  
+      fetchCategories(
+        currentPage,
+        search
+      );
+  
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to delete category";
+      alert(message);
+    }
   };
 
   if (loading) {
@@ -168,9 +236,17 @@ export default function CategoryPage() {
         </div>
 
         <button
-          onClick={() =>
-            setShowModal(true)
-          }
+          onClick={() => {
+            setIsEditMode(false);
+          
+            setSelectedCategoryId(null);
+          
+            setFormData({
+              name: "",
+            });
+          
+            setShowModal(true);
+          }}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
           + Add Category
@@ -219,6 +295,10 @@ export default function CategoryPage() {
                     <th className="p-4 text-left">
                       Category Name
                     </th>
+
+                    <th className="p-4 text-left">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
 
@@ -235,6 +315,28 @@ export default function CategoryPage() {
 
                         <td className="p-4">
                           {category.name}
+                        </td>
+
+                        <td className="p-4">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() =>
+                                handleEdit(category)
+                              }
+                              className="px-3 py-1 bg-yellow-500 text-white rounded"
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              onClick={() =>
+                                handleDelete(category.id)
+                              }
+                              className="px-3 py-1 bg-red-600 text-white rounded"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     )
@@ -288,11 +390,15 @@ export default function CategoryPage() {
 
       {showModal && (
         <CategoryFormModal
-          title="Create Category"
+          title={
+            isEditMode
+              ? "Edit Category"
+              : "Create Category"
+          }
           formData={formData}
           setFormData={setFormData}
           onSubmit={
-            handleCreateCategory
+            handleSubmitCategory
           }
           onClose={() =>
             setShowModal(false)
