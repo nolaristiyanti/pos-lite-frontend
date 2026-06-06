@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/productApi";
+import {
+  getCategories,
+} from "../api/categoryApi";
+
+import ProductFormModal from "../components/ProductFormModal";
+
+import {
+  createProduct,
+  updateProduct,
+} from "../api/productApi";
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -19,9 +29,41 @@ export default function ProductPage() {
   const [lastPage, setLastPage] =
     useState(1);
 
+  const [categories, setCategories] =
+  useState([]);
+
+  const [showModal, setShowModal] =
+    useState(false);
+
+  const [editingProduct, setEditingProduct] =
+    useState(null);
+
+  const [successMessage, setSuccessMessage] =
+    useState("");
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   useEffect(() => {
     fetchProducts();
   }, [currentPage, search]);
+
+  const fetchCategories = async () => {
+    try {
+      const response =
+        await getCategories({
+          page: 1,
+          search: "",
+        });
+  
+      setCategories(
+        response.data.data
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -57,6 +99,38 @@ export default function ProductPage() {
     }
   };
 
+  const handleSubmitProduct =
+  async (data) => {
+    try {
+      if (editingProduct) {
+        await updateProduct(
+          editingProduct.id,
+          data
+        );
+
+        setSuccessMessage(
+          "Product updated successfully"
+        );
+      } else {
+        await createProduct(data);
+
+        setSuccessMessage(
+          "Product created successfully"
+        );
+      }
+
+      setShowModal(false);
+      setEditingProduct(null);
+
+      fetchProducts();
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+          "Failed to save product"
+      );
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -67,6 +141,18 @@ export default function ProductPage() {
         <p className="text-gray-500">
           Manage products and inventory.
         </p>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          onClick={() => {
+            setEditingProduct(null);
+            setShowModal(true);
+          }}
+          className="rounded-lg bg-green-600 px-4 py-2 text-white"
+        >
+          + Add Product
+        </button>
       </div>
 
       {/* Search */}
@@ -117,6 +203,14 @@ export default function ProductPage() {
           </div>
         )}
 
+      {
+        successMessage && (
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">
+            {successMessage}
+          </div>
+        )
+      }
+
       {/* Table */}
 
       {!loading &&
@@ -139,6 +233,9 @@ export default function ProductPage() {
                     </th>
                     <th className="p-3">
                       Stock
+                    </th>
+                    <th className="p-3">
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -177,6 +274,18 @@ export default function ProductPage() {
 
                         <td className="p-3">
                           {product.stock}
+                        </td>
+
+                        <td className="p-3">
+                          <button
+                            onClick={() => {
+                              setEditingProduct(product);
+                              setShowModal(true);
+                            }}
+                            className="rounded bg-yellow-500 px-3 py-1 text-white"
+                          >
+                            Edit
+                          </button>
                         </td>
                       </tr>
                     )
@@ -223,6 +332,21 @@ export default function ProductPage() {
             </div>
           </>
         )}
+
+        <ProductFormModal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false);
+            setEditingProduct(null);
+          }}
+          onSubmit={
+            handleSubmitProduct
+          }
+          categories={categories}
+          initialData={
+            editingProduct
+          }
+        />
     </div>
   );
 }
