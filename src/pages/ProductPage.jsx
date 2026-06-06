@@ -10,6 +10,7 @@ import ProductFormModal from "../components/ProductFormModal";
 import {
   createProduct,
   updateProduct,
+  deleteProduct,
 } from "../api/productApi";
 
 export default function ProductPage() {
@@ -125,6 +126,29 @@ export default function ProductPage() {
       alert(
         error.response?.data?.message ||
           "Failed to save product"
+      );
+    }
+  };
+
+  const handleDeleteProduct = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+  
+    if (!confirmed) return;
+  
+    try {
+      await deleteProduct(id);
+  
+      setSuccessMessage(
+        "Product deleted successfully"
+      );
+  
+      fetchProducts();
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+        "Failed to delete product"
       );
     }
   };
@@ -275,23 +299,34 @@ export default function ProductPage() {
                         </td>
 
                         <td className="p-3">
-                          <button
-                            onClick={() => {
-                              console.log("PRODUCT CLICKED");
-                              console.log(product);
-                              setEditingProduct({
-                                ...product,
-                                category_id:
-                                  product.category_id ||
-                                  product.category?.id,
-                              });
-                            
-                              setShowModal(true);
-                            }}
-                            className="rounded bg-yellow-500 px-3 py-1 text-white"
-                          >
-                            Edit
-                          </button>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                setEditingProduct({
+                                  ...product,
+                                  category_id:
+                                    product.category_id ||
+                                    product.category?.id,
+                                });
+
+                                setShowModal(true);
+                              }}
+                              className="rounded bg-yellow-500 px-3 py-1 text-white"
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              onClick={() =>
+                                handleDeleteProduct(
+                                  product.id
+                                )
+                              }
+                              className="rounded bg-red-600 px-3 py-1 text-white"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     )
