@@ -57,15 +57,11 @@ export default function CategoryPage() {
       setCategories(
         paginationData.data || []
       );
-
-      setCurrentPage(
-        paginationData.current_page || 1
-      );
-
+      
       setLastPage(
         paginationData.last_page || 1
       );
-
+      
       setTotal(
         paginationData.total || 0
       );
@@ -140,14 +136,20 @@ export default function CategoryPage() {
     fetchCategories(currentPage, search);
   }, [currentPage]);
 
-  const handleSearch = (e) => {
-    const value = e.target.value;
-
-    setSearch(value);
-
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+  
+  const handleSearchSubmit = () => {
     setCurrentPage(1);
-
-    fetchCategories(1, value);
+  
+    fetchCategories(1, search);
+  };
+  
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearchSubmit();
+    }
   };
 
   const handleEdit = (category) => {
@@ -256,13 +258,23 @@ export default function CategoryPage() {
       {/* Search */}
 
       <div className="bg-white rounded-xl shadow p-4">
-        <input
-          type="text"
-          placeholder="Search category..."
-          value={search}
-          onChange={handleSearch}
-          className="w-full border rounded-lg px-4 py-2"
-        />
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Search category..."
+            value={search}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
+            className="flex-1 border rounded-lg px-4 py-2"
+          />
+
+          <button
+            onClick={handleSearchSubmit}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Search
+          </button>
+        </div>
       </div>
 
       {/* Table */}
