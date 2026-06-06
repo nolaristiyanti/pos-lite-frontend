@@ -51,6 +51,16 @@ export default function ProductPage() {
     fetchProducts();
   }, [currentPage, search]);
 
+  useEffect(() => {
+    if (!successMessage) return;
+  
+    const timer = setTimeout(() => {
+      setSuccessMessage("");
+    }, 3000);
+  
+    return () => clearTimeout(timer);
+  }, [successMessage]);
+
   const fetchCategories = async () => {
     try {
       const response =
@@ -153,6 +163,18 @@ export default function ProductPage() {
     }
   };
 
+  const getImageUrl = (image) => {
+    if (!image) {
+      return "https://via.placeholder.com/150";
+    }
+  
+    if (image.startsWith("http")) {
+      return image;
+    }
+  
+    return `http://127.0.0.1:8000/storage/${image}`;
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -179,7 +201,7 @@ export default function ProductPage() {
 
       {/* Search */}
 
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3 md:flex-row">
         <input
           type="text"
           placeholder="Search product..."
@@ -188,7 +210,7 @@ export default function ProductPage() {
             setSearchInput(e.target.value)
           }
           onKeyDown={handleKeyDown}
-          className="flex-1 rounded-lg border px-4 py-2"
+          className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
         />
 
         <button
@@ -221,7 +243,15 @@ export default function ProductPage() {
         !error &&
         products.length === 0 && (
           <div className="rounded-lg border p-6 text-center text-gray-500">
-            No products found.
+            <div className="space-y-2">
+              <p className="text-lg font-medium">
+                No Products Found
+              </p>
+
+              <p className="text-sm text-gray-500">
+                Try another keyword or create a new product.
+              </p>
+            </div>
           </div>
         )}
 
@@ -239,11 +269,14 @@ export default function ProductPage() {
         !error &&
         products.length > 0 && (
           <>
-            <div className="overflow-hidden rounded-xl border bg-white">
+            <div className="overflow-x-auto rounded-xl border bg-white">
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-100 text-left">
                     <th className="p-3">#</th>
+                    <th className="p-3">
+                      Image
+                    </th>
                     <th className="p-3">
                       Product
                     </th>
@@ -277,6 +310,14 @@ export default function ProductPage() {
                         </td>
 
                         <td className="p-3">
+                          <img
+                            src={getImageUrl(product.image)}
+                            alt={product.name}
+                            className="h-12 w-12 rounded-lg border object-cover"
+                          />
+                        </td>
+
+                        <td className="p-3">
                           {product.name}
                         </td>
 
@@ -288,14 +329,20 @@ export default function ProductPage() {
                         </td>
 
                         <td className="p-3">
-                          Rp{" "}
-                          {Number(
-                            product.price
-                          ).toLocaleString()}
+                          Rp {Number(product.price).toLocaleString("id-ID")}
                         </td>
 
                         <td className="p-3">
-                          {product.stock}
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-medium
+                            ${
+                              product.stock <= 10
+                                ? "bg-red-100 text-red-700"
+                                : "bg-green-100 text-green-700"
+                            }`}
+                          >
+                            {product.stock}
+                          </span>
                         </td>
 
                         <td className="p-3">
@@ -311,7 +358,7 @@ export default function ProductPage() {
 
                                 setShowModal(true);
                               }}
-                              className="rounded bg-yellow-500 px-3 py-1 text-white"
+                              className="rounded-lg bg-amber-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-600"
                             >
                               Edit
                             </button>
