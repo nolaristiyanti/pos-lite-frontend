@@ -5,20 +5,44 @@ export default function CategoryPage() {
   const [categories, setCategories] = useState([]);
 
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
 
-  const fetchCategories = async () => {
+  const [search, setSearch] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [total, setTotal] = useState(0);
+
+  const fetchCategories = async (
+    page = 1,
+    searchTerm = ""
+  ) => {
     try {
       setLoading(true);
       setError("");
 
-      const response = await getCategories();
+      const response = await getCategories({
+        page,
+        search: searchTerm,
+      });
 
-      const categoryData =
-        response?.data?.data || [];
+      const paginationData = response.data;
 
-      setCategories(categoryData);
+      setCategories(
+        paginationData.data || []
+      );
+
+      setCurrentPage(
+        paginationData.current_page
+      );
+
+      setLastPage(
+        paginationData.last_page
+      );
+
+      setTotal(
+        paginationData.total
+      );
     } catch (err) {
       console.error(err);
 
@@ -29,14 +53,24 @@ export default function CategoryPage() {
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    fetchCategories(currentPage, search);
+  }, [currentPage]);
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+
+    setSearch(value);
+
+    setCurrentPage(1);
+
+    fetchCategories(1, value);
+  };
 
   if (loading) {
     return (
       <div className="p-6">
         <div className="bg-white rounded-lg shadow p-6">
-          <p>Loading categories...</p>
+          Loading categories...
         </div>
       </div>
     );
@@ -66,13 +100,29 @@ export default function CategoryPage() {
         </p>
       </div>
 
-      {/* Table Card */}
+      {/* Search */}
+
+      <div className="bg-white p-4 rounded-xl shadow">
+        <input
+          type="text"
+          placeholder="Search category..."
+          value={search}
+          onChange={handleSearch}
+          className="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+
+      {/* Table */}
 
       <div className="bg-white rounded-xl shadow">
-        <div className="p-5 border-b">
+        <div className="flex justify-between items-center p-5 border-b">
           <h2 className="font-semibold">
             Category List
           </h2>
+
+          <span className="text-sm text-gray-500">
+            Total: {total}
+          </span>
         </div>
 
         {categories.length === 0 ? (
@@ -80,38 +130,75 @@ export default function CategoryPage() {
             No categories found
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="text-left p-4">
-                    ID
-                  </th>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="p-4 text-left">
+                      ID
+                    </th>
 
-                  <th className="text-left p-4">
-                    Category Name
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {categories.map((category) => (
-                  <tr
-                    key={category.id}
-                    className="border-t"
-                  >
-                    <td className="p-4">
-                      {category.id}
-                    </td>
-
-                    <td className="p-4">
-                      {category.name}
-                    </td>
+                    <th className="p-4 text-left">
+                      Category Name
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody>
+                  {categories.map((category) => (
+                    <tr
+                      key={category.id}
+                      className="border-t hover:bg-gray-50"
+                    >
+                      <td className="p-4">
+                        {category.id}
+                      </td>
+
+                      <td className="p-4">
+                        {category.name}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+
+            <div className="flex justify-between items-center p-4 border-t">
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage(
+                    currentPage - 1
+                  )
+                }
+                className="px-4 py-2 border rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+
+              <span>
+                Page {currentPage} of{" "}
+                {lastPage}
+              </span>
+
+              <button
+                disabled={
+                  currentPage === lastPage
+                }
+                onClick={() =>
+                  setCurrentPage(
+                    currentPage + 1
+                  )
+                }
+                className="px-4 py-2 border rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </>
         )}
       </div>
     </div>
