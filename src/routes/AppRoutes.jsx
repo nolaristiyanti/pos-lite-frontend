@@ -8,61 +8,52 @@ import TransactionPage from "../pages/TransactionPage";
 import ReportPage from "../pages/ReportPage";
 
 import ProtectedRoute from "../components/ProtectedRoute";
+import AppLayout from "../components/AppLayout";
 
 const AppRoutes = () => {
-    return (
-        <Routes>
-            <Route
-                path="/login"
-                element={<LoginPage />}
-            />
+  const protectedPage = (Component) => (
+    <ProtectedRoute>
+      <AppLayout>
+        <Component />
+      </AppLayout>
+    </ProtectedRoute>
+  );
 
-            <Route
-                path="/"
-                element={
-                    <ProtectedRoute>
-                        <DashboardPage />
-                    </ProtectedRoute>
-                }
-            />
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
 
-            <Route
-                path="/categories"
-                element={
-                    <ProtectedRoute>
-                        <CategoryPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/"
+        element={protectedPage(DashboardPage)}
+      />
 
-            <Route
-                path="/products"
-                element={
-                    <ProtectedRoute>
-                        <ProductPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/dashboard"
+        element={protectedPage(DashboardPage)}
+      />
 
-            <Route
-                path="/transactions"
-                element={
-                    <ProtectedRoute>
-                        <TransactionPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/categories"
+        element={protectedPage(CategoryPage)}
+      />
 
-            <Route
-                path="/reports"
-                element={
-                    <ProtectedRoute>
-                        <ReportPage />
-                    </ProtectedRoute>
-                }
-            />
-        </Routes>
-    );
+      <Route
+        path="/products"
+        element={protectedPage(ProductPage)}
+      />
+
+      <Route
+        path="/transactions"
+        element={protectedPage(TransactionPage)}
+      />
+
+      <Route
+        path="/reports"
+        element={protectedPage(ReportPage)}
+      />
+    </Routes>
+  );
 };
 
 export default AppRoutes;
