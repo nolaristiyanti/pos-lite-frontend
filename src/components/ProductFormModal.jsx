@@ -17,29 +17,32 @@ export default function ProductFormModal({
       image: "",
     });
 
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        category_id:
-          initialData.category_id || "",
-        name: initialData.name || "",
-        description:
-          initialData.description || "",
-        price: initialData.price || "",
-        stock: initialData.stock || "",
-        image: initialData.image || "",
-      });
-    } else {
-      setFormData({
-        category_id: "",
-        name: "",
-        description: "",
-        price: "",
-        stock: "",
-        image: "",
-      });
-    }
-  }, [initialData]);
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+            category_id: String(
+                initialData.category_id ||
+                initialData.category?.id ||
+                ""
+            ),
+            name: initialData.name || "",
+            description:
+                initialData.description || "",
+            price: initialData.price || "",
+            stock: initialData.stock || "",
+            image: initialData.image || "",
+            });
+        } else {
+            setFormData({
+            category_id: "",
+            name: "",
+            description: "",
+            price: "",
+            stock: "",
+            image: "",
+            });
+        }
+    }, [initialData]);
 
   if (!isOpen) return null;
 
@@ -81,16 +84,14 @@ export default function ProductFormModal({
               Select Category
             </option>
 
-            {categories.map(
-              (category) => (
+            {categories.map((category) => (
                 <option
-                  key={category.id}
-                  value={category.id}
+                    key={category.id}
+                    value={String(category.id)}
                 >
-                  {category.name}
+                    {category.name}
                 </option>
-              )
-            )}
+            ))}
           </select>
 
           <input

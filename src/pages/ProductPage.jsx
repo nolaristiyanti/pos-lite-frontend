@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProducts } from "../api/productApi";
 import {
   getCategories,
+  getAllCategories
 } from "../api/categoryApi";
 
 import ProductFormModal from "../components/ProductFormModal";
@@ -52,13 +53,10 @@ export default function ProductPage() {
   const fetchCategories = async () => {
     try {
       const response =
-        await getCategories({
-          page: 1,
-          search: "",
-        });
-  
+        await getAllCategories();
+
       setCategories(
-        response.data.data
+        response.data
       );
     } catch (error) {
       console.error(error);
@@ -279,7 +277,15 @@ export default function ProductPage() {
                         <td className="p-3">
                           <button
                             onClick={() => {
-                              setEditingProduct(product);
+                              console.log("PRODUCT CLICKED");
+                              console.log(product);
+                              setEditingProduct({
+                                ...product,
+                                category_id:
+                                  product.category_id ||
+                                  product.category?.id,
+                              });
+                            
                               setShowModal(true);
                             }}
                             className="rounded bg-yellow-500 px-3 py-1 text-white"

@@ -36,3 +36,13 @@ export const deleteCategory = async (id) => {
 
   return response.data;
 };
+
+export const getAllCategories =
+  async () => {
+    const response =
+      await axiosInstance.get(
+        "/categories/all"
+      );
+
+    return response.data;
+  };
