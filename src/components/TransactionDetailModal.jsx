@@ -8,9 +8,7 @@ const TransactionDetailModal = ({
   }
 
   const formatCurrency = (value) => {
-    return Number(value).toLocaleString(
-      "id-ID"
-    );
+    return Number(value).toLocaleString("id-ID");
   };
 
   const formatDate = (date) => {
@@ -31,12 +29,21 @@ const TransactionDetailModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-xl bg-white shadow-2xl">
+    <div className="receipt-print-root fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div
+        className="
+          w-full
+          max-w-md
+          rounded-xl
+          bg-white
+          shadow-2xl
+          print:max-w-lg
+          print:shadow-none
+        "
+      >
 
         {/* Header */}
-
-        <div className="border-b p-4">
+        <div className="print-hidden border-b p-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">
               Receipt Preview
@@ -51,15 +58,19 @@ const TransactionDetailModal = ({
           </div>
         </div>
 
-        {/* Receipt */}
-
+        {/* Printable Area */}
         <div
           id="receipt-content"
-          className="p-6 font-mono text-sm"
+          className="
+            p-6
+            font-mono
+            text-sm
+            print:text-base
+          "
         >
 
           <div className="text-center">
-            <h1 className="text-xl font-bold">
+            <h1 className="text-2xl font-bold">
               POS LITE
             </h1>
 
@@ -70,18 +81,14 @@ const TransactionDetailModal = ({
 
           <div className="my-4 border-t border-dashed" />
 
-          <div className="space-y-1">
+          <div className="space-y-2">
             <div className="flex justify-between">
               <span>Receipt</span>
-
-              <span>
-                #{transaction.id}
-              </span>
+              <span>#{transaction.id}</span>
             </div>
 
             <div className="flex justify-between">
               <span>Date</span>
-
               <span>
                 {formatDate(
                   transaction.created_at
@@ -91,7 +98,6 @@ const TransactionDetailModal = ({
 
             <div className="flex justify-between">
               <span>Cashier</span>
-
               <span>
                 {transaction.user?.name}
               </span>
@@ -99,11 +105,8 @@ const TransactionDetailModal = ({
 
             <div className="flex justify-between">
               <span>Payment</span>
-
               <span className="capitalize">
-                {
-                  transaction.payment_method
-                }
+                {transaction.payment_method}
               </span>
             </div>
           </div>
@@ -118,9 +121,7 @@ const TransactionDetailModal = ({
                   className="border-b border-dashed pb-2"
                 >
                   <div className="font-medium">
-                    {
-                      item.product?.name
-                    }
+                    {item.product?.name}
                   </div>
 
                   <div className="mt-1 flex justify-between text-gray-600">
@@ -166,8 +167,11 @@ const TransactionDetailModal = ({
               Powered by POS Lite
             </p>
           </div>
-          <div className="mt-6 flex gap-3 border-t pt-4 print:hidden">
+        </div>
 
+        {/* Buttons */}
+        <div className="print-hidden border-t p-4">
+          <div className="flex gap-3">
             <button
               onClick={handlePrint}
               className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
@@ -181,10 +185,9 @@ const TransactionDetailModal = ({
             >
               Close
             </button>
-
-            </div>
-
+          </div>
         </div>
+
       </div>
     </div>
   );
