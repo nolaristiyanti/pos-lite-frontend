@@ -18,6 +18,10 @@ export default function Navbar() {
       path: "/products",
     },
     {
+      name: "Users",
+      path: "/users",
+    },
+    {
       name: "Transactions",
       path: "/transactions",
     },

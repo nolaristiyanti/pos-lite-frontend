@@ -10,6 +10,8 @@ import ReportPage from "../pages/ReportPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AppLayout from "../components/AppLayout";
 
+import UserPage from "../pages/UserPage";
+
 const AppRoutes = () => {
   const protectedPage = (
     Component,
@@ -50,6 +52,11 @@ const AppRoutes = () => {
           ProductPage,
           "admin"
         )}
+      />
+
+      <Route
+          path="/users"
+          element={<UserPage />}
       />
 
       <Route
