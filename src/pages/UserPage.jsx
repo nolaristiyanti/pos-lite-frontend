@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import { getUsers } from "../api/userApi";
-import { createUser } from "../api/userApi";
+import {
+    getUsers,
+    getUser,
+    createUser,
+    updateUser,
+    deleteUser,
+} from "../api/userApi";
 
 export default function UserPage() {
     const [users, setUsers] = useState([]);
@@ -20,6 +25,16 @@ export default function UserPage() {
         name: "",
         email: "",
         password: "",
+        role: "cashier",
+    });
+
+    const [showEditModal, setShowEditModal] = useState(false);
+
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const [editForm, setEditForm] = useState({
+        name: "",
+        email: "",
         role: "cashier",
     });
 
@@ -69,6 +84,56 @@ export default function UserPage() {
           console.error(error);
         }
       };
+    
+    const handleEditClick = (user) => {
+        setSelectedUser(user);
+        
+        setEditForm({
+            name: user.name,
+            email: user.email,
+            role: user.role,
+        });
+        
+        setShowEditModal(true);
+    };
+
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+      
+        try {
+          await updateUser(
+            selectedUser.id,
+            editForm
+          );
+      
+          setShowEditModal(false);
+      
+          fetchUsers();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    const handleDeleteUser = async (user) => {
+        const confirmed = window.confirm(
+            `Delete ${user.name}?`
+        );
+    
+        if (!confirmed) return;
+    
+        try {
+            await deleteUser(user.id);
+    
+            fetchUsers();
+        } catch (error) {
+            console.error(error);
+    
+            alert(
+                error?.response?.data?.message ||
+                "Failed to delete user"
+            );
+        }
+    };
 
     return (
         <div className="space-y-6">
@@ -151,11 +216,25 @@ export default function UserPage() {
                                     </td>
 
                                     <td className="p-3">
-                                        <button
-                                            className="rounded bg-yellow-500 px-3 py-1 text-white"
-                                        >
-                                            Edit
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() =>
+                                                    handleEditClick(user)
+                                                }
+                                                className="rounded bg-yellow-500 px-3 py-1 text-white"
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <button
+                                                onClick={() =>
+                                                    handleDeleteUser(user)
+                                                }
+                                                className="rounded bg-red-500 px-3 py-1 text-white"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))
@@ -286,6 +365,87 @@ export default function UserPage() {
                         </div>
                         </form>
                     </div>
+                    </div>
+                )
+            }
+
+            {
+                showEditModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                        <div className="w-full max-w-md rounded-lg bg-white p-6">
+                            <h2 className="mb-4 text-xl font-bold">
+                                Edit User
+                            </h2>
+
+                            <form
+                                onSubmit={handleUpdateUser}
+                                className="space-y-4"
+                            >
+                                <input
+                                    type="text"
+                                    value={editForm.name}
+                                    onChange={(e) =>
+                                        setEditForm({
+                                            ...editForm,
+                                            name: e.target.value,
+                                        })
+                                    }
+                                    className="w-full rounded border p-2"
+                                    required
+                                />
+
+                                <input
+                                    type="email"
+                                    value={editForm.email}
+                                    onChange={(e) =>
+                                        setEditForm({
+                                            ...editForm,
+                                            email: e.target.value,
+                                        })
+                                    }
+                                    className="w-full rounded border p-2"
+                                    required
+                                />
+
+                                <select
+                                    value={editForm.role}
+                                    onChange={(e) =>
+                                        setEditForm({
+                                            ...editForm,
+                                            role: e.target.value,
+                                        })
+                                    }
+                                    className="w-full rounded border p-2"
+                                >
+                                    <option value="cashier">
+                                        Cashier
+                                    </option>
+
+                                    <option value="admin">
+                                        Admin
+                                    </option>
+                                </select>
+
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowEditModal(false)
+                                        }
+                                        className="rounded border px-4 py-2"
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        className="rounded bg-blue-600 px-4 py-2 text-white"
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 )
             }
