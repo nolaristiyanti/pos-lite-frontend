@@ -13,9 +13,16 @@ export const getBestSellingProducts = async () => {
   return response.data;
 };
 
-export const getLowStockProducts = async () => {
+export const getLowStockProducts = async (
+  page = 1
+) => {
   const response = await api.get(
-    "/reports/low-stock-products"
+    "/reports/low-stock-products",
+    {
+      params: {
+        page,
+      },
+    }
   );
 
   return response.data;

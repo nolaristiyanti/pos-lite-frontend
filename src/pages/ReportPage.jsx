@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import ReportSummaryCards from "../components/ReportSummaryCards";
 import BestSellingProductsTable from "../components/BestSellingProductsTable";
 import LowStockProductsTable from "../components/LowStockProductsTable";
@@ -11,11 +12,32 @@ import {
 
 const ReportPage = () => {
   const [salesData, setSalesData] = useState(null);
-  const [bestSellingProducts, setBestSellingProducts] = useState([]);
-  const [lowStockProducts, setLowStockProducts] = useState([]);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [
+    bestSellingProducts,
+    setBestSellingProducts,
+  ] = useState([]);
+
+  const [
+    lowStockProducts,
+    setLowStockProducts,
+  ] = useState([]);
+
+  const [
+    lowStockPage,
+    setLowStockPage,
+  ] = useState(1);
+
+  const [
+    lowStockLastPage,
+    setLowStockLastPage,
+  ] = useState(1);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
 
   const fetchReports = async () => {
     try {
@@ -25,21 +47,17 @@ const ReportPage = () => {
       const [
         totalSalesResponse,
         bestSellingResponse,
-        lowStockResponse,
       ] = await Promise.all([
         getTotalSales(),
         getBestSellingProducts(),
-        getLowStockProducts(),
       ]);
 
-      setSalesData(totalSalesResponse.data);
+      setSalesData(
+        totalSalesResponse.data
+      );
 
       setBestSellingProducts(
         bestSellingResponse.data || []
-      );
-
-      setLowStockProducts(
-        lowStockResponse.data?.products || []
       );
     } catch (err) {
       console.error(err);
@@ -53,9 +71,37 @@ const ReportPage = () => {
     }
   };
 
+  const fetchLowStockProducts =
+    async (page = 1) => {
+      try {
+        const response =
+          await getLowStockProducts(
+            page
+          );
+
+        setLowStockProducts(
+          response.data.products
+            .data || []
+        );
+
+        setLowStockLastPage(
+          response.data.products
+            .last_page || 1
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
   useEffect(() => {
     fetchReports();
   }, []);
+
+  useEffect(() => {
+    fetchLowStockProducts(
+      lowStockPage
+    );
+  }, [lowStockPage]);
 
   if (loading) {
     return (
@@ -88,17 +134,41 @@ const ReportPage = () => {
           Monitor sales performance and inventory status
         </p>
       </div>
-  
+
       <ReportSummaryCards
         salesData={salesData}
       />
-  
+
       <BestSellingProductsTable
         products={bestSellingProducts}
       />
-  
+
       <LowStockProductsTable
         products={lowStockProducts}
+        currentPage={
+          lowStockPage
+        }
+        lastPage={
+          lowStockLastPage
+        }
+        onPrevPage={() =>
+          setLowStockPage(
+            (prev) =>
+              Math.max(
+                prev - 1,
+                1
+              )
+          )
+        }
+        onNextPage={() =>
+          setLowStockPage(
+            (prev) =>
+              Math.min(
+                prev + 1,
+                lowStockLastPage
+              )
+          )
+        }
       />
     </div>
   );
