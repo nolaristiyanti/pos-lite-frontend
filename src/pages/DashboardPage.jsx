@@ -1,68 +1,74 @@
 import { useEffect, useState } from "react";
 
-import { getAllCategories } from "../api/categoryApi";
-import { getProducts } from "../api/productApi";
-import { getTransactions } from "../api/transactionApi";
-import { getTotalSales } from "../api/reportApi";
+import {
+  getDashboardSummary,
+} from "../api/reportApi";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
-    categories: 0,
-    products: 0,
-    transactions: 0,
-    totalSales: 0,
+    todaySales: 0,
+    todayTransactions: 0,
+    monthlyRevenue: 0,
+    lowStockAlerts: 0,
   });
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] =
+    useState(true);
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(amount);
+  const [error, setError] =
+    useState("");
+
+  const formatCurrency = (
+    amount
+  ) => {
+    return new Intl.NumberFormat(
+      "id-ID",
+      {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }
+    ).format(amount);
   };
 
-  const fetchDashboardStats = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  const fetchDashboardStats =
+    async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-      const [
-        categoriesResponse,
-        productsResponse,
-        transactionsResponse,
-        totalSalesResponse,
-      ] = await Promise.all([
-        getAllCategories(),
-        getProducts(),
-        getTransactions(),
-        getTotalSales(),
-      ]);
+        const response =
+          await getDashboardSummary();
 
-      setStats({
-        categories:
-          categoriesResponse?.data?.length || 0,
-      
-        products:
-          productsResponse?.data?.total || 0,
-      
-        transactions:
-          transactionsResponse?.data?.total || 0,
-      
-        totalSales:
-          totalSalesResponse?.total_sales ||
-          totalSalesResponse?.data?.total_sales ||
-          0,
-      });
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load dashboard statistics");
-    } finally {
-      setLoading(false);
-    }
-  };
+        setStats({
+          todaySales:
+            response?.data
+              ?.today_sales || 0,
+
+          todayTransactions:
+            response?.data
+              ?.today_transactions ||
+            0,
+
+          monthlyRevenue:
+            response?.data
+              ?.monthly_revenue || 0,
+
+          lowStockAlerts:
+            response?.data
+              ?.low_stock_alerts ||
+            0,
+        });
+      } catch (err) {
+        console.error(err);
+
+        setError(
+          "Failed to load dashboard statistics"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
   useEffect(() => {
     fetchDashboardStats();
@@ -71,7 +77,9 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="p-6">
-        <p className="text-gray-500">Loading dashboard...</p>
+        <p className="text-gray-500">
+          Loading dashboard...
+        </p>
       </div>
     );
   }
@@ -79,7 +87,7 @@ export default function DashboardPage() {
   if (error) {
     return (
       <div className="p-6">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-600">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-600">
           {error}
         </div>
       </div>
@@ -88,32 +96,46 @@ export default function DashboardPage() {
 
   const cards = [
     {
-      title: "Categories",
-      value: stats.categories,
+      title: "Today's Sales",
+      value: formatCurrency(
+        stats.todaySales
+      ),
+      icon: "💰",
     },
     {
-      title: "Products",
-      value: stats.products,
+      title:
+        "Today's Transactions",
+      value:
+        stats.todayTransactions,
+      icon: "🧾",
     },
     {
-      title: "Transactions",
-      value: stats.transactions,
+      title: "Monthly Revenue",
+      value: formatCurrency(
+        stats.monthlyRevenue
+      ),
+      icon: "📈",
     },
     {
-      title: "Total Sales",
-      value: formatCurrency(stats.totalSales),
+      title: "Low Stock Alerts",
+      value:
+        stats.lowStockAlerts,
+      icon: "⚠️",
     },
   ];
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-8">
+      <div className="rounded-2xl border bg-white p-6 shadow-sm">
         <h1 className="text-3xl font-bold text-gray-900">
-          Dashboard
+          Welcome Back 👋
         </h1>
 
-        <p className="mt-2 text-gray-600">
-          Welcome back. Monitor your POS Lite business performance.
+        <p className="mt-2 text-gray-500">
+          Monitor your business
+          performance and key
+          metrics from a single
+          dashboard.
         </p>
       </div>
 
@@ -121,13 +143,29 @@ export default function DashboardPage() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className="rounded-xl border bg-white p-6 shadow-sm"
+            className={`
+              rounded-2xl border p-6 shadow-sm
+              transition-all duration-200
+              hover:-translate-y-1 hover:shadow-lg
+              ${
+                card.title ===
+                  "Low Stock Alerts" &&
+                stats.lowStockAlerts >
+                  0
+                  ? "border-amber-300 bg-amber-50"
+                  : "bg-white"
+              }
+            `}
           >
-            <p className="text-sm text-gray-500">
+            <div className="mb-4 text-4xl">
+              {card.icon}
+            </div>
+
+            <p className="text-sm font-medium text-gray-500">
               {card.title}
             </p>
 
-            <h2 className="mt-3 text-3xl font-bold text-gray-900">
+            <h2 className="mt-2 text-4xl font-bold text-gray-900">
               {card.value}
             </h2>
           </div>

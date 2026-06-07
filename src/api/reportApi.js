@@ -14,3 +14,13 @@ export const getLowStockProducts = async () => {
   const response = await api.get("/reports/low-stock-products");
   return response.data;
 };
+
+export const getDashboardSummary =
+  async () => {
+    const response =
+      await api.get(
+        "/reports/dashboard-summary"
+      );
+
+    return response.data;
+  };
