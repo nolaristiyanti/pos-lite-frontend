@@ -338,7 +338,7 @@ export default function TransactionPage() {
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold">
-                  Shopping Cart
+                  ☕ Shopping Cart
                 </h2>
 
                 <p className="text-sm text-gray-500">
@@ -438,20 +438,56 @@ export default function TransactionPage() {
                 ))}
 
                 <div className="border-t pt-4">
-                  <div className="flex justify-between text-sm">
-                    <span>Total Items</span>
-                    <span>{totalQuantity}</span>
-                  </div>
+                  <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                    <div className="mb-4">
+                      <h3 className="text-lg font-semibold text-amber-900">
+                        ☕ Current Order
+                      </h3>
 
-                  <div className="mt-2 flex justify-between text-lg font-bold">
-                    <span>Total</span>
+                      <p className="text-sm text-amber-700">
+                        Review order before checkout
+                      </p>
+                    </div>
 
-                    <span>
-                      Rp{" "}
-                      {cartTotal.toLocaleString(
-                        "id-ID"
-                      )}
-                    </span>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">
+                          Total Items
+                        </span>
+
+                        <span className="font-medium">
+                          {totalQuantity}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">
+                          Subtotal
+                        </span>
+
+                        <span className="font-medium">
+                          Rp{" "}
+                          {cartTotal.toLocaleString(
+                            "id-ID"
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="my-4 border-t border-amber-200"></div>
+
+                    <div className="rounded-lg border bg-white p-4">
+                      <p className="mb-1 text-xs uppercase tracking-wide text-gray-500">
+                        Total Payment
+                      </p>
+
+                      <p className="text-3xl font-bold text-amber-700">
+                        Rp{" "}
+                        {cartTotal.toLocaleString(
+                          "id-ID"
+                        )}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="mt-5">
@@ -503,7 +539,7 @@ export default function TransactionPage() {
         {/* Product Catalog Section */}
 
         <div className="lg:col-span-8">
-          <div className="rounded-xl border bg-white p-5 shadow-sm">
+          <div className="rounded-xl border bg-white p-5 shadow-md">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">
                 Product Catalog
