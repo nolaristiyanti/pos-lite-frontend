@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ReportSummaryCards from "../components/ReportSummaryCards";
 
 import {
   getTotalSales,
@@ -80,32 +81,22 @@ const ReportPage = () => {
         <h1 className="text-3xl font-bold">
           Reports
         </h1>
-
+  
         <p className="text-gray-500">
           Sales and inventory insights
         </p>
       </div>
-
-      <div className="rounded-lg border bg-white p-4 shadow-sm">
-        <h2 className="mb-2 text-lg font-semibold">
-          Total Sales Data
-        </h2>
-
-        <pre className="overflow-auto text-sm">
-          {JSON.stringify(
-            salesData,
-            null,
-            2
-          )}
-        </pre>
-      </div>
-
+  
+      <ReportSummaryCards
+        salesData={salesData}
+      />
+  
       <div className="rounded-lg border bg-white p-4 shadow-sm">
         <h2 className="mb-2 text-lg font-semibold">
           Best Selling Products
         </h2>
-
-        <pre className="overflow-auto text-sm">
+  
+        <pre>
           {JSON.stringify(
             bestSellingProducts,
             null,
@@ -113,13 +104,13 @@ const ReportPage = () => {
           )}
         </pre>
       </div>
-
+  
       <div className="rounded-lg border bg-white p-4 shadow-sm">
         <h2 className="mb-2 text-lg font-semibold">
           Low Stock Products
         </h2>
-
-        <pre className="overflow-auto text-sm">
+  
+        <pre>
           {JSON.stringify(
             lowStockProducts,
             null,
