@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/productApi";
-import { checkout } from "../api/transactionApi";
+import {
+  checkout,
+  getTransactions,
+} from "../api/transactionApi";
+
+import TransactionHistory from "../components/TransactionHistory";
 
 export default function TransactionPage() {
   const [products, setProducts] = useState([]);
+
+  const [transactions, setTransactions] = useState([]);
+  const [transactionPage, setTransactionPage,] = useState(1);
+  const [transactionLastPage, setTransactionLastPage,] = useState(1);
+  const [transactionLoading, setTransactionLoading,] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -20,8 +31,14 @@ export default function TransactionPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    fetchProducts(currentPage, search);
-  }, [currentPage, search]);
+    fetchProducts();
+  }, []);
+  
+  useEffect(() => {
+    fetchTransactions(
+      transactionPage
+    );
+  }, [transactionPage]);
 
   useEffect(() => {
     if (!successMessage) return;
@@ -62,6 +79,28 @@ export default function TransactionPage() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTransactions =
+  async (page = 1) => {
+    try {
+      setTransactionLoading(true);
+
+      const response =
+        await getTransactions(page);
+
+      setTransactions(
+        response.data.data || []
+      );
+
+      setTransactionLastPage(
+        response.data.last_page || 1
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTransactionLoading(false);
     }
   };
 
@@ -185,6 +224,9 @@ export default function TransactionPage() {
       setCartItems([]);
 
       await fetchProducts();
+      await fetchTransactions(
+        transactionPage
+      );
     } catch (err) {
       console.error(err);
 
@@ -550,6 +592,11 @@ export default function TransactionPage() {
           </div>
         </div>
       </div>
+
+      <TransactionHistory
+        transactions={transactions}
+        loading={transactionLoading}
+      />
     </div>
   );
 }

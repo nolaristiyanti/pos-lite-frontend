@@ -10,18 +10,17 @@ export const checkout = async (payload) => {
 };
 
 export const getTransactions = async (
-  page = 1,
-  search = ""
+  page = 1
 ) => {
-  const response = await axiosInstance.get(
-    "/transactions",
-    {
-      params: {
-        page,
-        search,
-      },
-    }
-  );
+  const response =
+    await axiosInstance.get(
+      "/transactions",
+      {
+        params: {
+          page,
+        },
+      }
+    );
 
   return response.data;
 };
