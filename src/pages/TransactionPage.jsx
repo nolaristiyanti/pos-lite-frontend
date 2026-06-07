@@ -43,15 +43,21 @@ export default function TransactionPage() {
     setDetailModalOpen,
   ] = useState(false);
 
+  const [paymentFilter, setPaymentFilter,] = useState("");
+
   useEffect(() => {
     fetchProducts();
   }, []);
   
   useEffect(() => {
     fetchTransactions(
-      transactionPage
+      transactionPage,
+      paymentFilter
     );
-  }, [transactionPage]);
+  }, [
+    transactionPage,
+    paymentFilter,
+  ]);
 
   useEffect(() => {
     if (!successMessage) return;
@@ -96,24 +102,36 @@ export default function TransactionPage() {
   };
 
   const fetchTransactions =
-  async (page = 1) => {
+  async (
+    page = 1,
+    paymentMethod =
+      paymentFilter
+  ) => {
     try {
-      setTransactionLoading(true);
+      setTransactionLoading(
+        true
+      );
 
       const response =
-        await getTransactions(page);
+        await getTransactions(
+          page,
+          paymentMethod
+        );
 
       setTransactions(
         response.data.data || []
       );
 
       setTransactionLastPage(
-        response.data.last_page || 1
+        response.data
+          .last_page || 1
       );
     } catch (error) {
       console.error(error);
     } finally {
-      setTransactionLoading(false);
+      setTransactionLoading(
+        false
+      );
     }
   };
 
@@ -622,6 +640,41 @@ export default function TransactionPage() {
         </div>
       </div>
 
+      <div className="rounded-xl border bg-white p-4 shadow-sm">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <h2 className="font-semibold">
+            Transaction Filters
+          </h2>
+
+          <select
+            value={paymentFilter}
+            onChange={(e) => {
+              setTransactionPage(1);
+              setPaymentFilter(
+                e.target.value
+              );
+            }}
+            className="rounded-lg border px-3 py-2"
+          >
+            <option value="">
+              All Payment Methods
+            </option>
+
+            <option value="cash">
+              Cash
+            </option>
+
+            <option value="qris">
+              QRIS
+            </option>
+
+            <option value="transfer">
+              Bank Transfer
+            </option>
+          </select>
+        </div>
+      </div>
+
       <TransactionHistory
         transactions={transactions}
         loading={transactionLoading}
@@ -629,6 +682,47 @@ export default function TransactionPage() {
           handleViewDetail
         }
       />
+
+      <div className="flex items-center justify-center gap-2">
+        <button
+          onClick={() =>
+            setTransactionPage(
+              (prev) =>
+                Math.max(prev - 1, 1)
+            )
+          }
+          disabled={
+            transactionPage === 1
+          }
+          className="rounded border px-3 py-2 disabled:bg-gray-100"
+        >
+          Prev
+        </button>
+
+        <span>
+          Page {transactionPage} of{" "}
+          {transactionLastPage}
+        </span>
+
+        <button
+          onClick={() =>
+            setTransactionPage(
+              (prev) =>
+                Math.min(
+                  prev + 1,
+                  transactionLastPage
+                )
+            )
+          }
+          disabled={
+            transactionPage ===
+            transactionLastPage
+          }
+          className="rounded border px-3 py-2 disabled:bg-gray-100"
+        >
+          Next
+        </button>
+      </div>
 
       <TransactionDetailModal
         open={detailModalOpen}

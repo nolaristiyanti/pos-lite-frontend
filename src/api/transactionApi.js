@@ -10,7 +10,8 @@ export const checkout = async (payload) => {
 };
 
 export const getTransactions = async (
-  page = 1
+  page = 1,
+  paymentMethod = ""
 ) => {
   const response =
     await axiosInstance.get(
@@ -18,6 +19,8 @@ export const getTransactions = async (
       {
         params: {
           page,
+          payment_method:
+            paymentMethod,
         },
       }
     );
