@@ -6,21 +6,33 @@ export const getTotalSales = async () => {
 };
 
 export const getBestSellingProducts = async () => {
-  const response = await api.get("/reports/best-selling-products");
+  const response = await api.get(
+    "/reports/best-selling-products"
+  );
+
   return response.data;
 };
 
 export const getLowStockProducts = async () => {
-  const response = await api.get("/reports/low-stock-products");
+  const response = await api.get(
+    "/reports/low-stock-products"
+  );
+
   return response.data;
 };
 
-export const getDashboardSummary =
-  async () => {
-    const response =
-      await api.get(
-        "/reports/dashboard-summary"
-      );
+export const getDashboardSummary = async () => {
+  const response = await api.get(
+    "/reports/dashboard-summary"
+  );
 
-    return response.data;
-  };
+  return response.data;
+};
+
+export const getCashierSummary = async () => {
+  const response = await api.get(
+    "/reports/cashier-summary"
+  );
+
+  return response.data;
+};

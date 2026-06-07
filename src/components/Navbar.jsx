@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Navbar() {
   const { user, logout } = useAuth();
 
-  const navItems = [
+  const adminNavItems = [
     {
       name: "Dashboard",
       path: "/dashboard",
@@ -27,12 +27,27 @@ export default function Navbar() {
     },
   ];
 
+  const cashierNavItems = [
+    {
+      name: "Dashboard",
+      path: "/dashboard",
+    },
+    {
+      name: "Transactions",
+      path: "/transactions",
+    },
+  ];
+
+  const navItems =
+  user?.role === "admin"
+    ? adminNavItems
+    : cashierNavItems;
+
   return (
     <nav className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          
-        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6">
             <div>
               <h1 className="text-xl font-bold text-blue-600">
                 POS Lite
@@ -73,8 +88,8 @@ export default function Navbar() {
                 {user?.name}
               </p>
 
-              <p className="hidden md:block text-xs text-gray-500">
-                {user?.email}
+              <p className="text-xs text-gray-500">
+                {user?.role}
               </p>
             </div>
 

@@ -11,8 +11,11 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import AppLayout from "../components/AppLayout";
 
 const AppRoutes = () => {
-  const protectedPage = (Component) => (
-    <ProtectedRoute>
+  const protectedPage = (
+    Component,
+    role = null
+  ) => (
+    <ProtectedRoute role={role}>
       <AppLayout>
         <Component />
       </AppLayout>
@@ -35,12 +38,18 @@ const AppRoutes = () => {
 
       <Route
         path="/categories"
-        element={protectedPage(CategoryPage)}
+        element={protectedPage(
+          CategoryPage,
+          "admin"
+        )}
       />
 
       <Route
         path="/products"
-        element={protectedPage(ProductPage)}
+        element={protectedPage(
+          ProductPage,
+          "admin"
+        )}
       />
 
       <Route
@@ -50,7 +59,10 @@ const AppRoutes = () => {
 
       <Route
         path="/reports"
-        element={protectedPage(ReportPage)}
+        element={protectedPage(
+          ReportPage,
+          "admin"
+        )}
       />
     </Routes>
   );
