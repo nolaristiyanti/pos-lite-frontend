@@ -43,20 +43,14 @@ export default function DashboardPage() {
 
       setStats({
         categories:
-          categoriesResponse?.data?.length ||
-          categoriesResponse?.length ||
-          0,
-
+          categoriesResponse?.data?.length || 0,
+      
         products:
-          productsResponse?.meta?.total ||
-          productsResponse?.data?.meta?.total ||
-          0,
-
+          productsResponse?.data?.total || 0,
+      
         transactions:
-          transactionsResponse?.meta?.total ||
-          transactionsResponse?.data?.meta?.total ||
-          0,
-
+          transactionsResponse?.data?.total || 0,
+      
         totalSales:
           totalSalesResponse?.total_sales ||
           totalSalesResponse?.data?.total_sales ||
