@@ -1,146 +1,168 @@
 const TransactionDetailModal = ({
-    open,
-    transaction,
-    onClose,
-  }) => {
-    if (!open || !transaction) {
-      return null;
-    }
-  
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl bg-white p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold">
-              Transaction #
-              {transaction.id}
+  open,
+  transaction,
+  onClose,
+}) => {
+  if (!open || !transaction) {
+    return null;
+  }
+
+  const formatCurrency = (value) => {
+    return Number(value).toLocaleString(
+      "id-ID"
+    );
+  };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleString(
+      "id-ID",
+      {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-xl bg-white shadow-2xl">
+
+        {/* Header */}
+
+        <div className="border-b p-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold">
+              Receipt Preview
             </h2>
-  
+
             <button
               onClick={onClose}
-              className="text-gray-500"
+              className="text-gray-500 hover:text-gray-700"
             >
               ✕
             </button>
           </div>
-  
-          <div className="mb-6 grid gap-3 md:grid-cols-3">
-            <div>
-              <p className="text-sm text-gray-500">
-                Date
-              </p>
-  
-              <p>
-                {new Date(
-                  transaction.created_at
-                ).toLocaleDateString(
-                  "id-ID"
-                )}
-              </p>
+        </div>
+
+        {/* Receipt */}
+
+        <div className="p-6 font-mono text-sm">
+
+          <div className="text-center">
+            <h1 className="text-xl font-bold">
+              POS LITE
+            </h1>
+
+            <p className="mt-1 text-gray-500">
+              Point of Sale System
+            </p>
+          </div>
+
+          <div className="my-4 border-t border-dashed" />
+
+          <div className="space-y-1">
+            <div className="flex justify-between">
+              <span>Receipt</span>
+
+              <span>
+                #{transaction.id}
+              </span>
             </div>
-  
-            <div>
-              <p className="text-sm text-gray-500">
-                Payment
-              </p>
-  
-              <p className="capitalize">
+
+            <div className="flex justify-between">
+              <span>Date</span>
+
+              <span>
+                {formatDate(
+                  transaction.created_at
+                )}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Cashier</span>
+
+              <span>
+                {transaction.user?.name}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Payment</span>
+
+              <span className="capitalize">
                 {
                   transaction.payment_method
                 }
-              </p>
-            </div>
-  
-            <div>
-              <p className="text-sm text-gray-500">
-                User
-              </p>
-  
-              <p>
-                {transaction.user?.name}
-              </p>
+              </span>
             </div>
           </div>
-  
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr className="border-b bg-gray-50">
-                  <th className="px-4 py-3 text-left">
-                    Product
-                  </th>
-  
-                  <th className="px-4 py-3 text-right">
-                    Qty
-                  </th>
-  
-                  <th className="px-4 py-3 text-right">
-                    Price
-                  </th>
-  
-                  <th className="px-4 py-3 text-right">
-                    Subtotal
-                  </th>
-                </tr>
-              </thead>
-  
-              <tbody>
-                {transaction.details?.map(
-                  (item, index) => (
-                    <tr
-                      key={index}
-                      className="border-b"
-                    >
-                      <td className="px-4 py-3">
-                        {
-                          item.product?.name
-                        }
-                      </td>
-  
-                      <td className="px-4 py-3 text-right">
-                        {item.quantity}
-                      </td>
-  
-                      <td className="px-4 py-3 text-right">
-                        Rp{" "}
-                        {Number(
-                          item.price
-                        ).toLocaleString(
-                          "id-ID"
-                        )}
-                      </td>
-  
-                      <td className="px-4 py-3 text-right">
-                        Rp{" "}
-                        {(
-                          Number(
-                            item.price
-                          ) *
+
+          <div className="my-4 border-t border-dashed" />
+
+          <div className="space-y-3">
+            {transaction.details?.map(
+              (item, index) => (
+                <div
+                  key={index}
+                  className="border-b border-dashed pb-2"
+                >
+                  <div className="font-medium">
+                    {
+                      item.product?.name
+                    }
+                  </div>
+
+                  <div className="mt-1 flex justify-between text-gray-600">
+                    <span>
+                      {item.quantity} × Rp{" "}
+                      {formatCurrency(
+                        item.price
+                      )}
+                    </span>
+
+                    <span>
+                      Rp{" "}
+                      {formatCurrency(
+                        item.price *
                           item.quantity
-                        ).toLocaleString(
-                          "id-ID"
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              )
+            )}
           </div>
-  
-          <div className="mt-6 border-t pt-4 text-right">
-            <div className="text-lg font-bold">
-              Total: Rp{" "}
-              {Number(
+
+          <div className="my-4 border-t border-dashed" />
+
+          <div className="flex justify-between text-lg font-bold">
+            <span>TOTAL</span>
+
+            <span>
+              Rp{" "}
+              {formatCurrency(
                 transaction.total_price
-              ).toLocaleString(
-                "id-ID"
               )}
-            </div>
+            </span>
+          </div>
+
+          <div className="my-4 border-t border-dashed" />
+
+          <div className="text-center text-gray-600">
+            <p>Thank You</p>
+
+            <p className="mt-1 text-xs">
+              Powered by POS Lite
+            </p>
           </div>
         </div>
       </div>
-    );
-  };
-  
-  export default TransactionDetailModal;
+    </div>
+  );
+};
+
+export default TransactionDetailModal;
