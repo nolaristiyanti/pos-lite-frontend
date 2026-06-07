@@ -4,6 +4,10 @@ import { checkout } from "../api/transactionApi";
 
 export default function TransactionPage() {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [search, setSearch] = useState("");
+
   const [cartItems, setCartItems] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -16,8 +20,8 @@ export default function TransactionPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage, search);
+  }, [currentPage, search]);
 
   useEffect(() => {
     if (!successMessage) return;
@@ -29,17 +33,26 @@ export default function TransactionPage() {
     return () => clearTimeout(timer);
   }, [successMessage]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (
+    page = currentPage,
+    searchTerm = search
+  ) => {
     try {
       setLoading(true);
       setError("");
 
       const response = await getProducts({
-        page: 1,
-        search: "",
+        page,
+        search: searchTerm,
       });
 
-      setProducts(response.data.data || []);
+      setProducts(
+        response.data.data || []
+      );
+
+      setLastPage(
+        response.data.last_page || 1
+      );
     } catch (err) {
       console.error(err);
 
@@ -224,6 +237,19 @@ export default function TransactionPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Product Catalog */}
 
+        <div className="mb-4 rounded-xl border bg-white p-4">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearch(e.target.value);
+            }}
+            className="w-full rounded-lg border px-4 py-2"
+          />
+        </div>
+
         <div className="lg:col-span-2">
           {loading && (
             <div className="rounded-xl border bg-white p-6">
@@ -312,6 +338,36 @@ export default function TransactionPage() {
                 })}
               </div>
             )}
+
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    Math.max(prev - 1, 1)
+                  )
+                }
+                disabled={currentPage === 1}
+                className="rounded border px-3 py-2 disabled:bg-gray-100"
+              >
+                Prev
+              </button>
+
+              <span className="px-4">
+                Page {currentPage} of {lastPage}
+              </span>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    Math.min(prev + 1, lastPage)
+                  )
+                }
+                disabled={currentPage === lastPage}
+                className="rounded border px-3 py-2 disabled:bg-gray-100"
+              >
+                Next
+              </button>
+            </div>
         </div>
 
         {/* Cart */}
