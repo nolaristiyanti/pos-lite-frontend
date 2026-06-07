@@ -246,15 +246,23 @@ export default function TransactionPage() {
         })),
       };
 
-      await checkout(payload);
+      const response =
+        await checkout(payload);
 
       setSuccessMessage(
         "Transaction completed successfully."
       );
 
+      setSelectedTransaction(
+        response.data
+      );
+
+      setDetailModalOpen(true);
+
       setCartItems([]);
 
       await fetchProducts();
+
       await fetchTransactions(
         transactionPage
       );
