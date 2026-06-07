@@ -128,7 +128,10 @@ export default function DashboardPage() {
       value: formatCurrency(
         stats.todaySales
       ),
-      icon: "💰",
+      icon: "☕",
+      color:
+        "border-green-200 bg-green-50",
+      footer: "Updated Today",
     },
     {
       title:
@@ -136,19 +139,28 @@ export default function DashboardPage() {
       value:
         stats.todayTransactions,
       icon: "🧾",
+      color:
+        "border-blue-200 bg-blue-50",
+      footer: "Orders Today",
     },
     {
       title: "Monthly Revenue",
       value: formatCurrency(
         stats.monthlyRevenue
       ),
-      icon: "📈",
+      icon: "💰",
+      color:
+        "border-amber-200 bg-amber-50",
+      footer: "Current Month",
     },
     {
       title: "Low Stock Alerts",
       value:
         stats.lowStockAlerts,
       icon: "⚠️",
+      color:
+        "border-red-200 bg-red-50",
+      footer: "Need Restock",
     },
   ];
 
@@ -158,7 +170,10 @@ export default function DashboardPage() {
       value: formatCurrency(
         stats.todaySales
       ),
-      icon: "💰",
+      icon: "☕",
+      color:
+        "border-green-200 bg-green-50",
+      footer: "Updated Today",
     },
     {
       title:
@@ -166,6 +181,9 @@ export default function DashboardPage() {
       value:
         stats.todayTransactions,
       icon: "🧾",
+      color:
+        "border-blue-200 bg-blue-50",
+      footer: "Orders Processed",
     },
   ];
 
@@ -176,15 +194,15 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-2xl border bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-amber-200 bg-gradient-to-r from-amber-50 to-white p-6 shadow-sm">
         <h1 className="text-3xl font-bold text-gray-900">
-          Welcome Back 👋
+          ☕ POS Lite Coffee
         </h1>
 
-        <p className="mt-2 text-gray-500">
+        <p className="mt-2 text-gray-600">
           {user?.role === "cashier"
-            ? "Monitor your personal sales performance today."
-            : "Monitor your business performance and key metrics from a single dashboard."}
+            ? "Manage orders and monitor your sales performance today."
+            : "Monitor sales performance and daily coffee shop operations."}
         </p>
       </div>
 
@@ -198,25 +216,37 @@ export default function DashboardPage() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className={`rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${
-              card.title ===
-                "Low Stock Alerts" &&
-              stats.lowStockAlerts > 0
-                ? "border-amber-300 bg-amber-50"
-                : "bg-white"
-            }`}
+            className={`
+              rounded-3xl
+              border
+              p-6
+              shadow-sm
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:shadow-lg
+              ${card.color}
+            `}
           >
-            <div className="mb-4 text-4xl">
-              {card.icon}
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  {card.title}
+                </p>
+
+                <h2 className="mt-3 text-3xl font-bold text-gray-900">
+                  {card.value}
+                </h2>
+
+                <p className="mt-4 text-xs text-gray-500">
+                  {card.footer}
+                </p>
+              </div>
+
+              <div className="text-5xl">
+                {card.icon}
+              </div>
             </div>
-
-            <p className="text-sm font-medium text-gray-500">
-              {card.title}
-            </p>
-
-            <h2 className="mt-2 text-4xl font-bold text-gray-900">
-              {card.value}
-            </h2>
           </div>
         ))}
       </div>
