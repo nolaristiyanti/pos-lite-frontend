@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/productApi";
+import { checkout } from "../api/transactionApi";
 
 export default function TransactionPage() {
   const [products, setProducts] = useState([]);
@@ -7,6 +8,12 @@ export default function TransactionPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+  
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -104,10 +111,48 @@ export default function TransactionPage() {
     setCartItems([]);
   };
 
+  const handleCheckout = async () => {
+    try {
+      setCheckoutLoading(true);
+      setError("");
+      setSuccessMessage("");
+  
+      const payload = {
+        payment_method: paymentMethod,
+        items: cartItems.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+        })),
+      };
+  
+      await checkout(payload);
+  
+      setSuccessMessage(
+        "Transaction completed successfully."
+      );
+  
+      setCartItems([]);
+  
+      await fetchProducts();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Checkout failed."
+      );
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
   const cartTotal = cartItems.reduce(
     (total, item) =>
       total +
       Number(item.price) * item.quantity,
+    0
+  );
+
+  const totalQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
     0
   );
 
@@ -117,6 +162,12 @@ export default function TransactionPage() {
         <h1 className="text-2xl font-bold">
           Transaction
         </h1>
+
+        {successMessage && (
+            <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">
+                {successMessage}
+            </div>
+        )}
 
         <p className="text-gray-500">
           Select products and create a
@@ -308,28 +359,67 @@ export default function TransactionPage() {
                     </div>
                   ))}
 
-                  <div className="border-t pt-4">
-                    <div className="flex justify-between text-sm">
-                      <span>
-                        Total Items
-                      </span>
+                    <div className="border-t pt-4">
+                        <div className="flex justify-between text-sm">
+                            <span>Total Items</span>
 
-                      <span>
-                        {cartItems.length}
-                      </span>
+                            <span>{totalQuantity}</span>
+                        </div>
+
+                        <div className="mt-2 flex justify-between text-lg font-bold">
+                            <span>Total</span>
+
+                            <span>
+                            Rp{" "}
+                            {cartTotal.toLocaleString("id-ID")}
+                            </span>
+                        </div>
+
+                        {/* Payment Method */}
+
+                        <div className="mt-5">
+                            <label className="mb-2 block text-sm font-medium">
+                            Payment Method
+                            </label>
+
+                            <select
+                            value={paymentMethod}
+                            onChange={(e) =>
+                                setPaymentMethod(
+                                e.target.value
+                                )
+                            }
+                            className="w-full rounded-lg border px-3 py-2"
+                            >
+                            <option value="cash">
+                                Cash
+                            </option>
+
+                            <option value="qris">
+                                QRIS
+                            </option>
+
+                            <option value="transfer">
+                                Bank Transfer
+                            </option>
+                            </select>
+                        </div>
+
+                        {/* Checkout Button */}
+
+                        <button
+                            onClick={handleCheckout}
+                            disabled={
+                            cartItems.length === 0 ||
+                            checkoutLoading
+                            }
+                            className="mt-5 w-full rounded-lg bg-green-600 px-4 py-3 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+                        >
+                            {checkoutLoading
+                            ? "Processing..."
+                            : "Checkout"}
+                        </button>
                     </div>
-
-                    <div className="mt-2 flex justify-between text-lg font-bold">
-                      <span>Total</span>
-
-                      <span>
-                        Rp{" "}
-                        {cartTotal.toLocaleString(
-                          "id-ID"
-                        )}
-                      </span>
-                    </div>
-                  </div>
                 </div>
               )}
             </div>
