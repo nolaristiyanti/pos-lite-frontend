@@ -24,9 +24,28 @@ const TransactionDetailModal = ({
     );
   };
 
-  const orderNumber = `ORD-${String(
-    transaction.id
-  ).padStart(6, "0")}`;
+  const transactionDate = new Date(
+    transaction.created_at
+  );
+  
+  const year =
+    transactionDate.getFullYear();
+  
+  const month = String(
+    transactionDate.getMonth() + 1
+  ).padStart(2, "0");
+  
+  const day = String(
+    transactionDate.getDate()
+  ).padStart(2, "0");
+  
+  const datePart =
+    `${year}${month}${day}`;
+  
+  const orderNumber =
+    `ORD-${datePart}-${String(
+      transaction.id
+    ).padStart(6, "0")}`;
 
   const handlePrint = () => {
     window.print();
