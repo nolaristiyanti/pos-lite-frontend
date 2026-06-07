@@ -26,6 +26,10 @@ const TransactionDetailModal = ({
     );
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-xl bg-white shadow-2xl">
@@ -49,7 +53,10 @@ const TransactionDetailModal = ({
 
         {/* Receipt */}
 
-        <div className="p-6 font-mono text-sm">
+        <div
+          id="receipt-content"
+          className="p-6 font-mono text-sm"
+        >
 
           <div className="text-center">
             <h1 className="text-xl font-bold">
@@ -159,6 +166,24 @@ const TransactionDetailModal = ({
               Powered by POS Lite
             </p>
           </div>
+          <div className="mt-6 flex gap-3 border-t pt-4 print:hidden">
+
+            <button
+              onClick={handlePrint}
+              className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Print Receipt
+            </button>
+
+            <button
+              onClick={onClose}
+              className="flex-1 rounded-lg border px-4 py-2 hover:bg-gray-50"
+            >
+              Close
+            </button>
+
+            </div>
+
         </div>
       </div>
     </div>
