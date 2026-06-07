@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ReportSummaryCards from "../components/ReportSummaryCards";
 import BestSellingProductsTable from "../components/BestSellingProductsTable";
+import LowStockProductsTable from "../components/LowStockProductsTable";
 
 import {
   getTotalSales,
@@ -96,19 +97,9 @@ const ReportPage = () => {
         products={bestSellingProducts}
       />
   
-      <div className="rounded-lg border bg-white p-4 shadow-sm">
-        <h2 className="mb-2 text-lg font-semibold">
-          Low Stock Products
-        </h2>
-  
-        <pre>
-          {JSON.stringify(
-            lowStockProducts,
-            null,
-            2
-          )}
-        </pre>
-      </div>
+      <LowStockProductsTable
+        products={lowStockProducts}
+      />
     </div>
   );
 };
