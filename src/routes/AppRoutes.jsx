@@ -56,7 +56,10 @@ const AppRoutes = () => {
 
       <Route
           path="/users"
-          element={<UserPage />}
+          element={protectedPage(
+              UserPage,
+              "admin"
+          )}
       />
 
       <Route
