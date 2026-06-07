@@ -24,6 +24,10 @@ const TransactionDetailModal = ({
     );
   };
 
+  const orderNumber = `ORD-${String(
+    transaction.id
+  ).padStart(6, "0")}`;
+
   const handlePrint = () => {
     window.print();
   };
@@ -46,7 +50,7 @@ const TransactionDetailModal = ({
         <div className="print-hidden border-b p-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">
-              Receipt Preview
+              ☕ Coffee Shop Receipt
             </h2>
 
             <button
@@ -70,12 +74,12 @@ const TransactionDetailModal = ({
         >
 
           <div className="text-center">
-            <h1 className="text-2xl font-bold">
-              POS LITE
+            <h1 className="text-3xl font-bold tracking-wide">
+              ☕ POS LITE COFFEE
             </h1>
 
-            <p className="mt-1 text-gray-500">
-              Point of Sale System
+            <p className="mt-2 text-sm text-gray-500">
+              Modern Coffee Shop POS
             </p>
           </div>
 
@@ -83,12 +87,16 @@ const TransactionDetailModal = ({
 
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span>Receipt</span>
-              <span>#{transaction.id}</span>
+              <span>Order No</span>
+
+              <span className="font-medium">
+                {orderNumber}
+              </span>
             </div>
 
             <div className="flex justify-between">
               <span>Date</span>
+
               <span>
                 {formatDate(
                   transaction.created_at
@@ -98,6 +106,7 @@ const TransactionDetailModal = ({
 
             <div className="flex justify-between">
               <span>Cashier</span>
+
               <span>
                 {transaction.user?.name}
               </span>
@@ -105,7 +114,8 @@ const TransactionDetailModal = ({
 
             <div className="flex justify-between">
               <span>Payment</span>
-              <span className="capitalize">
+
+              <span className="uppercase">
                 {transaction.payment_method}
               </span>
             </div>
@@ -118,9 +128,9 @@ const TransactionDetailModal = ({
               (item, index) => (
                 <div
                   key={index}
-                  className="border-b border-dashed pb-2"
+                  className="border-b border-dashed pb-3"
                 >
-                  <div className="font-medium">
+                  <div className="font-semibold">
                     {item.product?.name}
                   </div>
 
@@ -135,8 +145,8 @@ const TransactionDetailModal = ({
                     <span>
                       Rp{" "}
                       {formatCurrency(
-                        item.price *
-                          item.quantity
+                        item.quantity *
+                          item.price
                       )}
                     </span>
                   </div>
@@ -147,24 +157,34 @@ const TransactionDetailModal = ({
 
           <div className="my-4 border-t border-dashed" />
 
-          <div className="flex justify-between text-lg font-bold">
-            <span>TOTAL</span>
+          <div className="rounded-lg bg-gray-50 p-4">
+            <div className="text-center">
+              <p className="text-xs uppercase tracking-wider text-gray-500">
+                Total Payment
+              </p>
 
-            <span>
-              Rp{" "}
-              {formatCurrency(
-                transaction.total_price
-              )}
-            </span>
+              <p className="mt-2 text-3xl font-bold">
+                Rp{" "}
+                {formatCurrency(
+                  transaction.total_price
+                )}
+              </p>
+            </div>
           </div>
 
           <div className="my-4 border-t border-dashed" />
 
           <div className="text-center text-gray-600">
-            <p>Thank You</p>
+            <p className="font-medium">
+              ☕ Thank You For Visiting
+            </p>
 
-            <p className="mt-1 text-xs">
-              Powered by POS Lite
+            <p className="mt-1">
+              See You Again
+            </p>
+
+            <p className="mt-3 text-xs text-gray-400">
+              POS Lite Coffee Shop
             </p>
           </div>
         </div>
