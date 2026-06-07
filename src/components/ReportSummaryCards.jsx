@@ -13,25 +13,25 @@ const ReportSummaryCards = ({ salesData }) => {
     ).format(totalSales);
   
     return (
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-lg border bg-white p-6 shadow-sm">
-          <p className="text-sm text-gray-500">
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="rounded-xl border border-green-100 bg-white p-6 shadow-sm">
+          <div className="mb-2 text-sm font-medium text-gray-500">
             Total Sales
-          </p>
+          </div>
   
-          <h2 className="mt-2 text-3xl font-bold">
+          <div className="text-3xl font-bold text-green-600">
             {formattedSales}
-          </h2>
+          </div>
         </div>
   
-        <div className="rounded-lg border bg-white p-6 shadow-sm">
-          <p className="text-sm text-gray-500">
+        <div className="rounded-xl border border-blue-100 bg-white p-6 shadow-sm">
+          <div className="mb-2 text-sm font-medium text-gray-500">
             Total Transactions
-          </p>
+          </div>
   
-          <h2 className="mt-2 text-3xl font-bold">
+          <div className="text-3xl font-bold text-blue-600">
             {totalTransactions}
-          </h2>
+          </div>
         </div>
       </div>
     );

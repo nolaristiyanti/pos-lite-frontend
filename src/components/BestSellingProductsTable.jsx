@@ -19,9 +19,9 @@ const BestSellingProductsTable = ({
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full">
+            <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b">
+                <tr className="border-b bg-gray-50">
                   <th className="px-4 py-3 text-left">
                     Rank
                   </th>
@@ -43,17 +43,17 @@ const BestSellingProductsTable = ({
                       key={product.product_id}
                       className="border-b"
                     >
-                      <td className="px-4 py-3">
-                        #{index + 1}
-                      </td>
-  
-                      <td className="px-4 py-3 font-medium">
-                        {product.product_name}
-                      </td>
-  
-                      <td className="px-4 py-3 text-right">
-                        {product.total_sold}
-                      </td>
+                        <td className="px-4 py-3 font-semibold">
+                            #{index + 1}
+                        </td>
+
+                        <td className="px-4 py-3 font-medium">
+                            {product.product_name}
+                        </td>
+
+                        <td className="px-4 py-3 text-right">
+                            {product.total_sold}
+                        </td>
                     </tr>
                   )
                 )}

@@ -2,7 +2,7 @@ const LowStockProductsTable = ({
     products,
   }) => {
     return (
-      <div className="rounded-lg border bg-white p-6 shadow-sm">
+      <div className="rounded-xl border bg-white p-6 shadow-sm">
         <div className="mb-4">
           <h2 className="text-lg font-semibold">
             Low Stock Products
@@ -52,7 +52,7 @@ const LowStockProductsTable = ({
   
                     <td className="px-4 py-3 text-center">
                       <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
-                        Low Stock
+                        ⚠️ Low Stock
                       </span>
                     </td>
                   </tr>
