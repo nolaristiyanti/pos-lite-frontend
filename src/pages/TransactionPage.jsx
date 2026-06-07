@@ -3,9 +3,12 @@ import { getProducts } from "../api/productApi";
 import {
   checkout,
   getTransactions,
+  getTransactionById,
 } from "../api/transactionApi";
 
 import TransactionHistory from "../components/TransactionHistory";
+import TransactionDetailModal from "../components/TransactionDetailModal";
+
 
 export default function TransactionPage() {
   const [products, setProducts] = useState([]);
@@ -29,6 +32,16 @@ export default function TransactionPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const [successMessage, setSuccessMessage] = useState("");
+
+  const [
+    selectedTransaction,
+    setSelectedTransaction,
+  ] = useState(null);
+  
+  const [
+    detailModalOpen,
+    setDetailModalOpen,
+  ] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -250,6 +263,22 @@ export default function TransactionPage() {
     (total, item) => total + item.quantity,
     0
   );
+
+  const handleViewDetail =
+  async (id) => {
+    try {
+      const response =
+        await getTransactionById(id);
+
+      setSelectedTransaction(
+        response.data
+      );
+
+      setDetailModalOpen(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -596,6 +625,19 @@ export default function TransactionPage() {
       <TransactionHistory
         transactions={transactions}
         loading={transactionLoading}
+        onViewDetail={
+          handleViewDetail
+        }
+      />
+
+      <TransactionDetailModal
+        open={detailModalOpen}
+        transaction={
+          selectedTransaction
+        }
+        onClose={() =>
+          setDetailModalOpen(false)
+        }
       />
     </div>
   );

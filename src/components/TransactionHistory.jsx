@@ -1,6 +1,7 @@
 const TransactionHistory = ({
     transactions,
     loading,
+    onViewDetail,
   }) => {
     if (loading) {
       return (
@@ -31,6 +32,10 @@ const TransactionHistory = ({
                 <th className="px-4 py-3 text-left">
                   ID
                 </th>
+
+                <th className="px-4 py-3 text-center">
+                    Action
+                </th>
   
                 <th className="px-4 py-3 text-left">
                   Date
@@ -55,6 +60,19 @@ const TransactionHistory = ({
                   >
                     <td className="px-4 py-3">
                       #{transaction.id}
+                    </td>
+
+                    <td className="px-4 py-3 text-center">
+                        <button
+                            onClick={() =>
+                            onViewDetail(
+                                transaction.id
+                            )
+                            }
+                            className="rounded-lg bg-blue-600 px-3 py-1 text-white hover:bg-blue-700"
+                        >
+                            View
+                        </button>
                     </td>
   
                     <td className="px-4 py-3">
