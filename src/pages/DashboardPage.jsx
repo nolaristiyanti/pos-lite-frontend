@@ -11,6 +11,9 @@ import {
   ReceiptText,
   Wallet,
   AlertTriangle,
+  CreditCard,
+  Clock3,
+  TrendingUp,
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -25,6 +28,8 @@ export default function DashboardPage() {
     averageOrderValue: 0,
   
     topSellingProduct: null,
+
+    peakSalesHour: null,
   
     revenueTrend: {
       percentage: 0,
@@ -61,63 +66,68 @@ export default function DashboardPage() {
         const response =
           await getCashierSummary();
   
-        setStats({
-          todaySales:
-            response?.data?.my_sales_today || 0,
-  
-          todayTransactions:
-            response?.data
-              ?.my_transactions_today || 0,
-  
-          monthlyRevenue: 0,
-  
-          lowStockAlerts: 0,
-  
-          averageOrderValue: 0,
-  
-          topSellingProduct: null,
-  
-          revenueTrend: {
-            percentage: 0,
-            direction: "up",
-            difference: 0,
-          },
-        });
+          setStats({
+            todaySales:
+              response?.data?.today_sales || 0,
+          
+            todayTransactions:
+              response?.data?.today_transactions || 0,
+          
+            monthlyRevenue:
+              response?.data?.monthly_revenue || 0,
+          
+            lowStockAlerts:
+              response?.data?.low_stock_alerts || 0,
+          
+            averageOrderValue:
+              response?.data?.average_order_value || 0,
+          
+            topSellingProduct:
+              response?.data?.top_selling_product || null,
+          
+            peakSalesHour:
+              response?.data?.peak_sales_hour || null,
+          
+            revenueTrend:
+              response?.data?.revenue_trend || {
+                percentage: 0,
+                direction: "up",
+                difference: 0,
+              },
+          });
       } else {
         const response =
           await getDashboardSummary();
   
-        setStats({
-          todaySales:
-            response?.data?.today_sales || 0,
-  
-          todayTransactions:
-            response?.data
-              ?.today_transactions || 0,
-  
-          monthlyRevenue:
-            response?.data
-              ?.monthly_revenue || 0,
-  
-          lowStockAlerts:
-            response?.data
-              ?.low_stock_alerts || 0,
-  
-          averageOrderValue:
-            response?.data
-              ?.average_order_value || 0,
-  
-          topSellingProduct:
-            response?.data
-              ?.top_selling_product || null,
-  
-          revenueTrend:
-            response?.data?.revenue_trend || {
-              percentage: 0,
-              direction: "up",
-              difference: 0,
-            },
-        });
+          setStats({
+            todaySales:
+              response?.data?.today_sales || 0,
+          
+            todayTransactions:
+              response?.data?.today_transactions || 0,
+          
+            monthlyRevenue:
+              response?.data?.monthly_revenue || 0,
+          
+            lowStockAlerts:
+              response?.data?.low_stock_alerts || 0,
+          
+            averageOrderValue:
+              response?.data?.average_order_value || 0,
+          
+            topSellingProduct:
+              response?.data?.top_selling_product || null,
+          
+            peakSalesHour:
+              response?.data?.peak_sales_hour || null,
+          
+            revenueTrend:
+              response?.data?.revenue_trend || {
+                percentage: 0,
+                direction: "up",
+                difference: 0,
+              },
+          });
       }
     } catch (err) {
       console.error(err);
@@ -364,8 +374,22 @@ export default function DashboardPage() {
           }`}
         >
           <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
-            <div className="mb-4 text-3xl">
-              💳
+            <div
+              className="
+                mb-4
+                flex
+                h-12
+                w-12
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#F8F4EE]
+              "
+            >
+              <CreditCard
+                size={22}
+                className="text-[#8B5E3C]"
+              />
             </div>
 
             <h3 className="font-semibold text-[#4B2E2B]">
@@ -386,6 +410,41 @@ export default function DashboardPage() {
           </div>
 
           <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
+            <div
+              className="
+                mb-4
+                flex
+                h-12
+                w-12
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#F8F4EE]
+              "
+            >
+              <Clock3
+                size={22}
+                className="text-[#8B5E3C]"
+              />
+            </div>
+
+            <h3 className="font-semibold text-[#4B2E2B]">
+              Peak Sales Hour
+            </h3>
+
+            <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
+              {stats.peakSalesHour?.hour ??
+                "No transactions"}
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500">
+              {stats.peakSalesHour
+                ? `${stats.peakSalesHour.transactions} transactions during peak hour`
+                : "No sales today"}
+            </p>
+          </div>
+
+          {/* <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
             <div className="mb-4 text-3xl">
               🏆
             </div>
@@ -403,11 +462,25 @@ export default function DashboardPage() {
               ? `${stats.topSellingProduct.qty} sold this month`
               : "No sales this month"}
             </p>
-          </div>
+          </div> */}
 
           <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
-            <div className="mb-4 text-3xl">
-              📈
+            <div
+              className="
+                mb-4
+                flex
+                h-12
+                w-12
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#F8F4EE]
+              "
+            >
+              <TrendingUp
+                size={22}
+                className="text-[#8B5E3C]"
+              />
             </div>
 
             <h3 className="font-semibold text-[#4B2E2B]">
