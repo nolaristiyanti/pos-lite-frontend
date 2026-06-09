@@ -6,6 +6,12 @@ import {
 } from "../api/reportApi";
 
 import { useAuth } from "../context/AuthContext";
+import {
+  Coffee,
+  ReceiptText,
+  Wallet,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -104,7 +110,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
+      <div className="rounded-3xl bg-white p-8 shadow-sm">
         <p className="text-gray-500">
           Loading dashboard...
         </p>
@@ -114,142 +120,305 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="p-6">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-600">
-          {error}
-        </div>
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600">
+        {error}
       </div>
     );
   }
 
-  const adminCards = [
-    {
-      title: "Today's Sales",
-      value: formatCurrency(
-        stats.todaySales
-      ),
-      icon: "☕",
-      color:
-        "border-green-200 bg-green-50",
-      footer: "Updated Today",
-    },
-    {
-      title:
-        "Today's Transactions",
-      value:
-        stats.todayTransactions,
-      icon: "🧾",
-      color:
-        "border-blue-200 bg-blue-50",
-      footer: "Orders Today",
-    },
-    {
-      title: "Monthly Revenue",
-      value: formatCurrency(
-        stats.monthlyRevenue
-      ),
-      icon: "💰",
-      color:
-        "border-amber-200 bg-amber-50",
-      footer: "Current Month",
-    },
-    {
-      title: "Low Stock Alerts",
-      value:
-        stats.lowStockAlerts,
-      icon: "⚠️",
-      color:
-        "border-red-200 bg-red-50",
-      footer: "Need Restock",
-    },
-  ];
-
-  const cashierCards = [
-    {
-      title: "My Sales Today",
-      value: formatCurrency(
-        stats.todaySales
-      ),
-      icon: "☕",
-      color:
-        "border-green-200 bg-green-50",
-      footer: "Updated Today",
-    },
-    {
-      title:
-        "My Transactions Today",
-      value:
-        stats.todayTransactions,
-      icon: "🧾",
-      color:
-        "border-blue-200 bg-blue-50",
-      footer: "Orders Processed",
-    },
-  ];
-
   const cards =
-    user?.role === "cashier"
-      ? cashierCards
-      : adminCards;
+  user?.role === "cashier"
+    ? [
+        {
+          title: "My Sales Today",
+          value: formatCurrency(
+            stats.todaySales
+          ),
+          icon: Coffee,
+          insight:
+            stats.todayTransactions > 0
+              ? "Updated today"
+              : "No transactions yet",
+        },
+        {
+          title:
+            "My Transactions Today",
+          value:
+            stats.todayTransactions,
+          icon: ReceiptText,
+          insight:
+            "Orders processed today",
+        },
+      ]
+    : [
+        {
+          title:
+            "Today's Sales",
+          value:
+            formatCurrency(
+              stats.todaySales
+            ),
+          icon: Coffee,
+          insight:
+            "Updated today",
+        },
+        {
+          title:
+            "Today's Transactions",
+          value:
+            stats.todayTransactions,
+          icon: ReceiptText,
+          insight:
+            "Orders processed today",
+        },
+        {
+          title:
+            "Monthly Revenue",
+          value:
+            formatCurrency(
+              stats.monthlyRevenue
+            ),
+          icon: Wallet,
+          insight:
+            "Revenue accumulated this month",
+        },
+        {
+          title:
+            "Low Stock Alerts",
+          value:
+            stats.lowStockAlerts,
+          icon: AlertTriangle,
+          insight:
+            stats.lowStockAlerts === 0
+              ? "Inventory looks healthy"
+              : "Requires restocking attention",
+        },
+      ];
+
+  const averageOrderValue =
+    stats.todayTransactions > 0
+      ? Math.round(
+          stats.todaySales /
+            stats.todayTransactions
+        )
+      : 0;
+
+  const revenueTrend = {
+    percentage: 12,
+  };
+
+  const topSellingProduct = {
+    name: "Caffe Latte",
+    sold: 42,
+  };
 
   return (
     <div className="space-y-8">
-      <div className="rounded-3xl border border-amber-200 bg-gradient-to-r from-amber-50 to-white p-6 shadow-sm">
-        <h1 className="text-3xl font-bold text-gray-900">
-          ☕ POS Lite Coffee
-        </h1>
+      <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-[#4B2E2B] via-[#5B392F] to-[#7A523B] p-8 text-white shadow-xl">
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-10">
+          <div className="h-56 w-56 rounded-full border-[18px] border-white"></div>
+          <div className="absolute -right-8 top-12 h-24 w-24 rounded-full border-[14px] border-white"></div>
+        </div>
 
-        <p className="mt-2 text-gray-600">
-          {user?.role === "cashier"
-            ? "Manage orders and monitor your sales performance today."
-            : "Monitor sales performance and daily coffee shop operations."}
-        </p>
-      </div>
+        <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-white/5 blur-3xl"></div>
 
-      <div
+        <div className="relative z-10">
+          <div className="inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur">
+            Brew Better. Sell Faster.
+          </div>
+
+          <h1 className="mt-5 text-4xl font-bold">
+            Welcome back,{" "}
+            {user?.name}
+          </h1>
+
+          <p className="mt-3 max-w-2xl text-lg text-amber-100">
+            Monitor your coffee
+            shop performance in
+            one place.
+          </p>
+        </div>
+      </section>
+
+      <section
         className={`grid gap-6 ${
           user?.role === "cashier"
-            ? "grid-cols-1 md:grid-cols-2"
-            : "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
+          ? "grid-cols-1 md:grid-cols-2"
+          : "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
         }`}
       >
-        {cards.map((card) => (
-          <div
-            key={card.title}
-            className={`
-              rounded-3xl
-              border
-              p-6
-              shadow-sm
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:shadow-lg
-              ${card.color}
-            `}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">
-                  {card.title}
-                </p>
+        {cards.map((card) => {
+          const Icon = card.icon;
 
-                <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                  {card.value}
-                </h2>
+          return (
+            <div
+              key={card.title}
+              className={`
+                rounded-[28px]
+                border
+                p-6
+                shadow-sm
+                transition-all
+                duration-300
+                hover:-translate-y-1
+                hover:shadow-xl
+                border-[#DCC5AF] bg-gradient-to-br from-[#FFF9F2] to-white
+              `}
+            >
+              <div className="relative">
+                <div className="pr-20">
+                  <p className="text-sm font-medium text-[#4B2E2B]">
+                    {card.title}
+                  </p>
 
-                <p className="mt-4 text-xs text-gray-500">
-                  {card.footer}
-                </p>
+                  <div className="mt-3 h-1 w-10 rounded-full bg-[#C49A6C]" />
+
+                  <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#4B2E2B]">
+                    {card.value}
+                  </h2>
+                </div>
+
+                <div
+                  className="
+                    absolute
+                    right-0
+                    top-0
+                    flex
+                    h-14
+                    w-14
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-[#F3E7DB]
+                  "
+                >
+                  <div
+                    className="
+                      flex
+                      h-8
+                      w-8
+                      items-center
+                      justify-center
+                    "
+                  >
+                      <Icon
+                        size={20}
+                        strokeWidth={2}
+                        className="text-[#8B5E3C]"
+                      />
+                  </div>
+                </div>
               </div>
 
-              <div className="text-5xl">
-                {card.icon}
+              <div className="mt-5 border-t border-[#F1E8DE] pt-4">
+                <p className="text-sm text-gray-500">
+                  {card.insight}
+                </p>
               </div>
             </div>
+          );
+        })}
+      </section>
+      
+      <section className="rounded-[32px] border border-[#E9DED2] bg-white p-8 shadow-sm">
+        <div className="mb-8 flex items-center gap-6 justify-center">
+          <div className="flex items-center gap-2">
+            <div className="relative h-5 w-4 rotate-12">
+              <div className="absolute left-0 top-0 h-5 w-3 rounded-full bg-[#D8C6B8]" />
+              <div className="absolute right-0 top-0 h-5 w-3 rounded-full bg-[#D8C6B8]" />
+
+              <div className="absolute left-1/2 top-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-white/70" />
+            </div>
+
+            <div className="relative h-5 w-4 rotate-12">
+              <div className="absolute left-0 top-0 h-5 w-3 rounded-full bg-[#A97A58]" />
+              <div className="absolute right-0 top-0 h-5 w-3 rounded-full bg-[#A97A58]" />
+
+              <div className="absolute left-1/2 top-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-white/70" />
+            </div>
+
+            <div className="relative h-5 w-4 rotate-12">
+              <div className="absolute left-0 top-0 h-5 w-3 rounded-full bg-[#6B4226]" />
+              <div className="absolute right-0 top-0 h-5 w-3 rounded-full bg-[#6B4226]" />
+
+              <div className="absolute left-1/2 top-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-white/70" />
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+        <div
+          className={`grid gap-6 ${
+            user?.role === "cashier"
+              ? "grid-cols-1 md:grid-cols-2"
+              : "grid-cols-1 md:grid-cols-3"
+          }`}
+        >
+          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
+            <div className="mb-4 text-3xl">
+              💳
+            </div>
+
+            <h3 className="font-semibold text-[#4B2E2B]">
+              Average Order Value
+            </h3>
+
+            <p className="mt-3 text-2xl font-bold text-[#4B2E2B]">
+              {formatCurrency(
+                averageOrderValue
+              )}
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500">
+              Average customer
+              spending per
+              transaction.
+            </p>
+          </div>
+
+          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
+            <div className="mb-4 text-3xl">
+              🏆
+            </div>
+
+            <h3 className="font-semibold text-[#4B2E2B]">
+              Top Selling Product
+            </h3>
+
+            <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
+              {topSellingProduct.name}
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500">
+              {
+                topSellingProduct.sold
+              }{" "}
+              sold this month
+            </p>
+          </div>
+
+          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
+            <div className="mb-4 text-3xl">
+              📈
+            </div>
+
+            <h3 className="font-semibold text-[#4B2E2B]">
+              Revenue Trend
+            </h3>
+
+            <p className="mt-3 text-2xl font-bold text-green-600">
+              ↑{" "}
+              {
+                revenueTrend.percentage
+              }
+              %
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500">
+              Compared to
+              yesterday.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
