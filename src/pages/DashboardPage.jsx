@@ -21,6 +21,16 @@ export default function DashboardPage() {
     todayTransactions: 0,
     monthlyRevenue: 0,
     lowStockAlerts: 0,
+  
+    averageOrderValue: 0,
+  
+    topSellingProduct: null,
+  
+    revenueTrend: {
+      percentage: 0,
+      direction: "up",
+      difference: 0,
+    },
   });
 
   const [loading, setLoading] =
@@ -42,65 +52,83 @@ export default function DashboardPage() {
     ).format(amount);
   };
 
-  const fetchDashboardStats =
-    async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        if (
-          user?.role === "cashier"
-        ) {
-          const response =
-            await getCashierSummary();
-
-          setStats({
-            todaySales:
-              response?.data
-                ?.my_sales_today || 0,
-
-            todayTransactions:
-              response?.data
-                ?.my_transactions_today ||
-              0,
-
-            monthlyRevenue: 0,
-            lowStockAlerts: 0,
-          });
-        } else {
-          const response =
-            await getDashboardSummary();
-
-          setStats({
-            todaySales:
-              response?.data
-                ?.today_sales || 0,
-
-            todayTransactions:
-              response?.data
-                ?.today_transactions ||
-              0,
-
-            monthlyRevenue:
-              response?.data
-                ?.monthly_revenue || 0,
-
-            lowStockAlerts:
-              response?.data
-                ?.low_stock_alerts ||
-              0,
-          });
-        }
-      } catch (err) {
-        console.error(err);
-
-        setError(
-          "Failed to load dashboard statistics"
-        );
-      } finally {
-        setLoading(false);
+  const fetchDashboardStats = async () => {
+    try {
+      setLoading(true);
+      setError("");
+  
+      if (user?.role === "cashier") {
+        const response =
+          await getCashierSummary();
+  
+        setStats({
+          todaySales:
+            response?.data?.my_sales_today || 0,
+  
+          todayTransactions:
+            response?.data
+              ?.my_transactions_today || 0,
+  
+          monthlyRevenue: 0,
+  
+          lowStockAlerts: 0,
+  
+          averageOrderValue: 0,
+  
+          topSellingProduct: null,
+  
+          revenueTrend: {
+            percentage: 0,
+            direction: "up",
+            difference: 0,
+          },
+        });
+      } else {
+        const response =
+          await getDashboardSummary();
+  
+        setStats({
+          todaySales:
+            response?.data?.today_sales || 0,
+  
+          todayTransactions:
+            response?.data
+              ?.today_transactions || 0,
+  
+          monthlyRevenue:
+            response?.data
+              ?.monthly_revenue || 0,
+  
+          lowStockAlerts:
+            response?.data
+              ?.low_stock_alerts || 0,
+  
+          averageOrderValue:
+            response?.data
+              ?.average_order_value || 0,
+  
+          topSellingProduct:
+            response?.data
+              ?.top_selling_product || null,
+  
+          revenueTrend:
+            response?.data?.revenue_trend || {
+              percentage: 0,
+              direction: "up",
+              difference: 0,
+            },
+        });
       }
-    };
+    } catch (err) {
+      console.error(err);
+  
+      setError(
+        "Failed to load dashboard statistics"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -194,23 +222,6 @@ export default function DashboardPage() {
               : "Requires restocking attention",
         },
       ];
-
-  const averageOrderValue =
-    stats.todayTransactions > 0
-      ? Math.round(
-          stats.todaySales /
-            stats.todayTransactions
-        )
-      : 0;
-
-  const revenueTrend = {
-    percentage: 12,
-  };
-
-  const topSellingProduct = {
-    name: "Caffe Latte",
-    sold: 42,
-  };
 
   return (
     <div className="space-y-8">
@@ -363,7 +374,7 @@ export default function DashboardPage() {
 
             <p className="mt-3 text-2xl font-bold text-[#4B2E2B]">
               {formatCurrency(
-                averageOrderValue
+                stats.averageOrderValue
               )}
             </p>
 
@@ -384,14 +395,13 @@ export default function DashboardPage() {
             </h3>
 
             <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
-              {topSellingProduct.name}
+              {stats.topSellingProduct?.name ?? "No sales yet"}
             </p>
 
             <p className="mt-2 text-sm text-gray-500">
-              {
-                topSellingProduct.sold
-              }{" "}
-              sold this month
+              {stats.topSellingProduct
+              ? `${stats.topSellingProduct.qty} sold this month`
+              : "No sales this month"}
             </p>
           </div>
 
@@ -404,17 +414,36 @@ export default function DashboardPage() {
               Revenue Trend
             </h3>
 
-            <p className="mt-3 text-2xl font-bold text-green-600">
-              ↑{" "}
-              {
-                revenueTrend.percentage
-              }
+            <p
+              className={`mt-3 text-2xl font-bold ${
+                stats.revenueTrend?.direction ===
+                "up"
+                  ? "text-green-600"
+                  : "text-red-600"
+              }`}
+            >
+              {stats.revenueTrend?.direction ===
+              "up"
+                ? "↑"
+                : "↓"}{" "}
+              {Math.abs(
+                stats.revenueTrend?.percentage ?? 0
+              )}
               %
             </p>
 
             <p className="mt-2 text-sm text-gray-500">
-              Compared to
-              yesterday.
+              {stats.revenueTrend?.difference >= 0
+                ? "+"
+                : "-"}
+              {" "}
+              {formatCurrency(
+                Math.abs(
+                  stats.revenueTrend?.difference ?? 0
+                )
+              )}
+              {" "}
+              vs yesterday
             </p>
           </div>
         </div>
