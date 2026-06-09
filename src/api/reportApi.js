@@ -1,17 +1,46 @@
 import api from "./axios";
 
-export const getTotalSales = async () => {
-  const response = await api.get("/reports/total-sales");
-  return response.data;
-};
+export const getTotalSales =
+  async (
+    startDate,
+    endDate
+  ) => {
+    const response =
+      await api.get(
+        "/reports/total-sales",
+        {
+          params: {
+            start_date:
+              startDate,
+            end_date:
+              endDate,
+          },
+        }
+      );
 
-export const getBestSellingProducts = async () => {
-  const response = await api.get(
-    "/reports/best-selling-products"
-  );
+    return response.data;
+  };
 
-  return response.data;
-};
+export const getBestSellingProducts =
+  async (
+    startDate,
+    endDate
+  ) => {
+    const response =
+      await api.get(
+        "/reports/best-selling-products",
+        {
+          params: {
+            start_date:
+              startDate,
+            end_date:
+              endDate,
+          },
+        }
+      );
+
+    return response.data;
+  };
 
 export const getLowStockProducts = async (
   page = 1
