@@ -14,6 +14,7 @@ import {
   CreditCard,
   Clock3,
   TrendingUp,
+  Trophy,
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -37,6 +38,8 @@ export default function DashboardPage() {
       difference: 0,
     },
   });
+
+  const hasSalesToday = stats.todaySales > 0;
 
   const [loading, setLoading] =
     useState(true);
@@ -341,11 +344,11 @@ export default function DashboardPage() {
         })}
       </section>
       
-      <section className="rounded-[32px] border border-[#E9DED2] bg-white p-8 shadow-sm">
-        <div className="mb-8 flex items-center gap-6 justify-center">
+      <section className="rounded-[32px] border border-[#DCC5AF] bg-gradient-to-br from-[#FFF9F2] to-white p-8 shadow-sm">
+        <div className="mb-8 flex flex-col items-center">
           <div className="flex items-center gap-2">
-            <div className="relative h-5 w-4 rotate-12">
-              <div className="absolute left-0 top-0 h-5 w-3 rounded-full bg-[#D8C6B8]" />
+          <div className="relative h-5 w-4 rotate-12">
+            <div className="absolute left-0 top-0 h-5 w-3 rounded-full bg-[#D8C6B8]" />
               <div className="absolute right-0 top-0 h-5 w-3 rounded-full bg-[#D8C6B8]" />
 
               <div className="absolute left-1/2 top-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-white/70" />
@@ -365,7 +368,12 @@ export default function DashboardPage() {
               <div className="absolute left-1/2 top-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-white/70" />
             </div>
           </div>
+
+          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7A523B]">
+            Business Insights
+          </p>
         </div>
+
         <div
           className={`grid gap-6 ${
             user?.role === "cashier"
@@ -373,7 +381,46 @@ export default function DashboardPage() {
               : "grid-cols-1 md:grid-cols-3"
           }`}
         >
-          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
+          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm 
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-[#DCC5AF]"
+          >
+            <div
+              className="
+                mb-4
+                flex
+                h-12
+                w-12
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#F8F4EE]
+              "
+            >
+              <Trophy
+                size={22}
+                className="text-[#8B5E3C]"
+              />
+            </div>
+
+            <h3 className="font-semibold text-[#4B2E2B]">
+              Product Spotlight
+            </h3>
+
+            <p className="mt-3 text-3xl font-bold leading-tight text-[#4B2E2B]">
+              {stats.topSellingProduct?.name ?? "No sales yet"}
+            </p>
+
+            <p className="mt-3 text-sm text-gray-500">
+              {stats.topSellingProduct
+                ? `${stats.topSellingProduct.qty} sold this month`
+                : "No sales this month"}
+            </p>
+          </div>
+
+          {/* <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
             <div
               className="
                 mb-4
@@ -407,64 +454,14 @@ export default function DashboardPage() {
               spending per
               transaction.
             </p>
-          </div>
-
-          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
-            <div
-              className="
-                mb-4
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-xl
-                bg-[#F8F4EE]
-              "
-            >
-              <Clock3
-                size={22}
-                className="text-[#8B5E3C]"
-              />
-            </div>
-
-            <h3 className="font-semibold text-[#4B2E2B]">
-              Peak Sales Hour
-            </h3>
-
-            <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
-              {stats.peakSalesHour?.hour ??
-                "No transactions"}
-            </p>
-
-            <p className="mt-2 text-sm text-gray-500">
-              {stats.peakSalesHour
-                ? `${stats.peakSalesHour.transactions} transactions during peak hour`
-                : "No sales today"}
-            </p>
-          </div>
-
-          {/* <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
-            <div className="mb-4 text-3xl">
-              🏆
-            </div>
-
-            <h3 className="font-semibold text-[#4B2E2B]">
-              Top Selling Product
-            </h3>
-
-            <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
-              {stats.topSellingProduct?.name ?? "No sales yet"}
-            </p>
-
-            <p className="mt-2 text-sm text-gray-500">
-              {stats.topSellingProduct
-              ? `${stats.topSellingProduct.qty} sold this month`
-              : "No sales this month"}
-            </p>
           </div> */}
 
-          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
+          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-[#DCC5AF]"
+          >
             <div
               className="
                 mb-4
@@ -487,7 +484,49 @@ export default function DashboardPage() {
               Revenue Trend
             </h3>
 
-            <p
+            {hasSalesToday ? (
+              <>
+                <p
+                  className={`mt-3 text-2xl font-bold ${
+                    stats.revenueTrend?.direction === "up"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {stats.revenueTrend?.direction === "up"
+                    ? "↑"
+                    : "↓"}{" "}
+                  {Math.abs(
+                    stats.revenueTrend?.percentage ?? 0
+                  )}
+                  %
+                </p>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  {stats.revenueTrend?.difference >= 0
+                    ? "+"
+                    : "-"}
+                  {formatCurrency(
+                    Math.abs(
+                      stats.revenueTrend?.difference ?? 0
+                    )
+                  )}{" "}
+                  vs yesterday
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
+                  No sales yet today
+                </p>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Compared with yesterday
+                </p>
+              </>
+            )}
+
+            {/* <p
               className={`mt-3 text-2xl font-bold ${
                 stats.revenueTrend?.direction ===
                 "up"
@@ -517,6 +556,46 @@ export default function DashboardPage() {
               )}
               {" "}
               vs yesterday
+            </p> */}
+          </div>
+
+          <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-[#DCC5AF]"
+          >
+            <div
+              className="
+                mb-4
+                flex
+                h-12
+                w-12
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#F8F4EE]
+              "
+            >
+              <Clock3
+                size={22}
+                className="text-[#8B5E3C]"
+              />
+            </div>
+
+            <h3 className="font-semibold text-[#4B2E2B]">
+              Peak Sales Hour
+            </h3>
+
+            <p className="mt-3 text-xl font-bold text-[#4B2E2B]">
+              {stats.peakSalesHour?.hour ??
+                "No peak hour yet"}
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500">
+              {stats.peakSalesHour
+                ? `${stats.peakSalesHour.transactions} transactions during peak hour`
+                : "Based on today's sales activity."}
             </p>
           </div>
         </div>
