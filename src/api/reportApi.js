@@ -72,3 +72,17 @@ export const getCashierSummary = async () => {
 
   return response.data;
 };
+
+export const getSlowMovingProducts = (
+  startDate,
+  endDate
+) =>
+  api.get(
+    "/reports/slow-moving-products",
+    {
+      params: {
+        start_date: startDate,
+        end_date: endDate,
+      },
+    }
+  );

@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 import ReportSummaryCards from "../components/ReportSummaryCards";
 import BestSellingProductsTable from "../components/BestSellingProductsTable";
 import LowStockProductsTable from "../components/LowStockProductsTable";
+import SlowMovingProductsTable from "../components/SlowMovingProductsTable";
 
 import {
   getTotalSales,
   getBestSellingProducts,
+  getSlowMovingProducts,
   getLowStockProducts,
 } from "../api/reportApi";
+
+import { Boxes, Package, TriangleAlert } from "lucide-react";
 
 const ReportPage = () => {
   const [salesData, setSalesData] = useState(null);
@@ -16,6 +20,11 @@ const ReportPage = () => {
   const [
     bestSellingProducts,
     setBestSellingProducts,
+  ] = useState([]);
+
+  const [
+    slowMovingProducts,
+    setSlowMovingProducts,
   ] = useState([]);
 
   const [
@@ -60,12 +69,17 @@ const ReportPage = () => {
       const [
         totalSalesResponse,
         bestSellingResponse,
+        slowMovingResponse,
       ] = await Promise.all([
         getTotalSales(
           start,
           end
         ),
         getBestSellingProducts(
+          start,
+          end
+        ),
+        getSlowMovingProducts(
           start,
           end
         ),
@@ -77,6 +91,10 @@ const ReportPage = () => {
 
       setBestSellingProducts(
         bestSellingResponse.data || []
+      );
+
+      setSlowMovingProducts(
+        slowMovingResponse.data.data || []
       );
     } catch (err) {
       console.error(err);
@@ -148,7 +166,7 @@ const ReportPage = () => {
   if (loading) {
     return (
       <div className="p-6">
-        <p className="text-gray-500">
+        <p className="text-[#8A7A6A]">
           Loading reports...
         </p>
       </div>
@@ -167,34 +185,19 @@ const ReportPage = () => {
 
   return (
     <div className="space-y-6 p-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Reports Dashboard
-          </h1>
-
-          <p className="mt-1 text-gray-500">
-            Monitor sales performance and inventory status
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-600">
-              Start Date
-            </label>
+            <h2 className="text-2xl font-bold text-[#4B2E2B]">
+              Sales Reports
+            </h2>
 
-            {/* <input
-              type="date"
-              value={startDate}
-              onChange={(e) =>
-                handleStartDateChange(
-                  e.target.value
-                )
-              }
-              className="rounded-xl border border-[#DCC5AF] px-3 py-2"
-            /> */}
+            <p className="mt-1 text-sm text-[#8A7A6A]">
+              Filter sales performance by date range
+            </p>
+          </div>
 
+          <div className="flex items-center gap-3">
             <input
               type="date"
               value={startDate}
@@ -204,26 +207,14 @@ const ReportPage = () => {
                   e.target.value
                 )
               }
-              className="rounded-xl border border-[#DCC5AF] px-3 py-2"
+              className="
+                rounded-xl border border-[#DCC5AF] px-3 py-2
+                bg-[#FFF9F2]
+                focus:border-[#C49A6C]
+                focus:outline-none
+                focus:ring-[#C49A6C]/20"
             />
-          </div>
 
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-600">
-              End Date
-            </label>
-
-            {/* <input
-              type="date"
-              value={endDate}
-              min={startDate}
-              onChange={(e) =>
-                setEndDate(
-                  e.target.value
-                )
-              }
-              className="rounded-xl border border-[#DCC5AF] px-3 py-2"
-            /> */}
             <input
               type="date"
               value={endDate}
@@ -234,64 +225,105 @@ const ReportPage = () => {
                   e.target.value
                 )
               }
-              className="rounded-xl border border-[#DCC5AF] px-3 py-2"
+              className="
+                rounded-xl border border-[#DCC5AF] px-3 py-2
+                bg-[#FFF9F2]
+                focus:border-[#C49A6C]
+                focus:outline-none
+                focus:ring-[#C49A6C]/20"
             />
-          </div>
 
-          <button
-            onClick={handleApplyFilter}
-            className="
-              self-end
-              rounded-xl
-              bg-[#4B2E2B]
-              px-5
-              py-2
-              font-medium
-              text-white
-              transition
-              hover:bg-[#5B392F]
-            "
-          >
-            Apply
-          </button>
+            <button
+              onClick={handleApplyFilter}
+              className="
+                rounded-xl
+                bg-[#4B2E2B]
+                px-5
+                py-2
+                font-medium
+                text-white
+                transition
+                hover:bg-[#5B392F]
+              "
+            >
+              Apply
+            </button>
+          </div>
         </div>
+
+        <ReportSummaryCards
+          salesData={salesData}
+        />
+
+        <BestSellingProductsTable
+          products={bestSellingProducts}
+        />
+
+        <SlowMovingProductsTable
+          products={slowMovingProducts}
+        />
       </div>
 
-      <ReportSummaryCards
-        salesData={salesData}
-      />
+      <div className="flex items-center gap-4 py-2">
+        <div className="h-px flex-1 bg-[#E8D7C5]" />
 
-      <BestSellingProductsTable
-        products={bestSellingProducts}
-      />
+        <span
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.2em]
+            text-[#B89D83]
+          "
+        >
+          Inventory Monitoring
+        </span>
 
-      <LowStockProductsTable
-        products={lowStockProducts}
-        currentPage={
-          lowStockPage
-        }
-        lastPage={
-          lowStockLastPage
-        }
-        onPrevPage={() =>
-          setLowStockPage(
-            (prev) =>
-              Math.max(
-                prev - 1,
-                1
-              )
-          )
-        }
-        onNextPage={() =>
-          setLowStockPage(
-            (prev) =>
-              Math.min(
-                prev + 1,
-                lowStockLastPage
-              )
-          )
-        }
-      />
+        <div className="h-px flex-1 bg-[#E8D7C5]" />
+      </div>
+
+      <div className="space-y-6">
+        {/* <div>
+          <div className="flex items-center gap-2">
+            <TriangleAlert
+              size={18}
+              className="text-red-500"
+            />
+
+            <h2 className="text-lg font-semibold text-[#4B2E2B]">
+              Low Stock Products
+            </h2>
+          </div>
+        </div> */}
+
+        <LowStockProductsTable
+          products={lowStockProducts}
+          currentPage={
+            lowStockPage
+          }
+          lastPage={
+            lowStockLastPage
+          }
+          onPrevPage={() =>
+            setLowStockPage(
+              (prev) =>
+                Math.max(
+                  prev - 1,
+                  1
+                )
+            )
+          }
+          onNextPage={() =>
+            setLowStockPage(
+              (prev) =>
+                Math.min(
+                  prev + 1,
+                  lowStockLastPage
+                )
+            )
+          }
+        />
+      </div>
     </div>
   );
 };
