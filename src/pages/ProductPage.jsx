@@ -336,23 +336,23 @@ export default function ProductPage() {
                     text-[#71717A]
                   "
                 >
-                    <th className="px-6 py-4 font-bold">#</th>
-                    <th className="px-6 py-4 font-bold">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]">#</th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                       Image
                     </th>
-                    <th className="px-6 py-4 font-bold">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                       Product
                     </th>
-                    <th className="px-6 py-4 font-bold">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                       Category
                     </th>
-                    <th className="px-6 py-4 font-bold">
+                    <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                       Price
                     </th>
-                    <th className="px-6 py-4 font-bold">
+                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                       Stock
                     </th>
-                    <th className="px-6 py-4 font-bold">
+                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                       Actions
                     </th>
                   </tr>
@@ -378,18 +378,20 @@ export default function ProductPage() {
                         </td>
 
                         <td className="px-6 py-4">
-                          <img
-                            src={getImageUrl(product.image)}
-                            alt={product.name}
-                            className="
-                              h-14
-                              w-14
-                              rounded-xl
-                              border
-                              border-[#ECE7E3]
-                              object-cover
-                            "
-                          />
+                          <div className="flex items-center justify-center">
+                            <img
+                              src={getImageUrl(product.image)}
+                              alt={product.name}
+                              className="
+                                h-14
+                                w-14
+                                rounded-xl
+                                border
+                                border-[#ECE7E3]
+                                object-cover
+                              "
+                            />
+                          </div>
                         </td>
 
                         <td className="px-6 py-4">
@@ -403,11 +405,11 @@ export default function ProductPage() {
                           }
                         </td>
 
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 text-right">
                           Rp {Number(product.price).toLocaleString("id-ID")}
                         </td>
 
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 text-center">
                         <span
                           className={`
                             inline-flex
@@ -430,7 +432,7 @@ export default function ProductPage() {
                         </td>
 
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 justify-center">
                             <button
                               onClick={() => {
                                 setEditingProduct({

@@ -240,19 +240,19 @@ export default function UserPage() {
                         text-[#71717A]
                     "
                 >
-                        <th className="px-6 py-4 text-left font-medium text-left">
+                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                             Name
                         </th>
 
-                        <th className="px-6 py-4 text-left font-medium text-left">
+                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                             Email
                         </th>
 
-                        <th className="px-6 py-4 text-left font-medium text-left">
+                        <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                             Role
                         </th>
 
-                        <th className="px-6 py-4 text-left font-medium text-left">
+                        <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#71717A]">
                             Actions
                         </th>
                     </tr>
@@ -287,7 +287,7 @@ export default function UserPage() {
                                         {user.email}
                                     </td>
 
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-4 text-center">
                                         <span
                                             className={`
                                             inline-flex
@@ -308,7 +308,7 @@ export default function UserPage() {
                                     </td>
 
                                     <td className="px-6 py-4">
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 justify-center">
                                             <button
                                                 onClick={() =>
                                                     handleEditClick(user)

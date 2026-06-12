@@ -332,43 +332,19 @@ export default function CategoryPage() {
                     "
                   >
                     <th
-                      className="
-                        px-6 py-4
-                        text-left
-                        text-xs
-                        font-bold
-                        uppercase
-                        tracking-wider
-                        text-zinc-500
-                      "
+                      className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]"
                     >
                       #
                     </th>
   
                     <th
-                      className="
-                        px-6 py-4
-                        text-left
-                        text-xs
-                        font-bold
-                        uppercase
-                        tracking-wider
-                        text-zinc-500
-                      "
+                      className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#71717A]"
                     >
                       Category Name
                     </th>
   
                     <th
-                      className="
-                        px-6 py-4
-                        text-left
-                        text-xs
-                        font-bold
-                        uppercase
-                        tracking-wider
-                        text-zinc-500
-                      "
+                      className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#71717A]"
                     >
                       Actions
                     </th>
@@ -407,23 +383,23 @@ export default function CategoryPage() {
                         </td>
   
                         <td className="px-6 py-3.5">
-                          <div className="flex gap-2">
-                          <button
-                            className="
-                              rounded-lg
-                              border border-[#E7E5E4]
-                              bg-[#FAF6F2]
-                              px-3 py-1.5
-                              text-xs
-                              font-semibold
-                              text-[#8B5A3C]
-                              transition-all
-                              hover:bg-[#F4E7DB]
-                              hover:border-[#D8B89C]
-                            "
-                          >
-                            Edit
-                          </button>
+                          <div className="flex gap-2 justify-center">
+                            <button
+                              className="
+                                rounded-lg
+                                border border-[#E7E5E4]
+                                bg-[#FAF6F2]
+                                px-3 py-1.5
+                                text-xs
+                                font-semibold
+                                text-[#8B5A3C]
+                                transition-all
+                                hover:bg-[#F4E7DB]
+                                hover:border-[#D8B89C]
+                              "
+                            >
+                              Edit
+                            </button>
   
                             <button
                               onClick={() =>
