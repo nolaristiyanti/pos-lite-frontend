@@ -179,7 +179,7 @@ export default function ProductPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#18181B]">
+          <h1 className="text-3xl font-semibold tracking-tight text-[#18181B]">
             Product Management
           </h1>
         </div>

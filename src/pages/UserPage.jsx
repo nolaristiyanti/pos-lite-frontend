@@ -38,6 +38,8 @@ export default function UserPage() {
         role: "cashier",
     });
 
+    const [searchInput, setSearchInput] = useState("");
+
     const fetchUsers = async () => {
         try {
             setLoading(true);
@@ -63,6 +65,11 @@ export default function UserPage() {
     useEffect(() => {
         fetchUsers();
     }, [page, search]);
+
+    const handleSearch = () => {
+        setSearch(searchInput);
+        setPage(1);
+      };
 
     const handleCreateUser = async (e) => {
         e.preventDefault();
@@ -138,7 +145,7 @@ export default function UserPage() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold">
+                <h1 className="text-3xl font-semibold tracking-tight text-[#18181B]">
                     User Management
                 </h1>
 
@@ -162,36 +169,56 @@ export default function UserPage() {
                 </div>
 
                 <div
-                className="
-                    rounded-3xl
-                    border
-                    border-[#ECE7E3]
-                    bg-white
-                    p-6
-                    shadow-sm
-                "
-                >
-
-                <input
-                    type="text"
-                    placeholder="Search users..."
-                    value={search}
-                    onChange={(e) => {
-                    setSearch(e.target.value);
-                    setPage(1);
-                    }}
                     className="
-                    w-full
-                    rounded-2xl
-                    border
-                    border-[#ECE7E3]
-                    px-4
-                    py-3
-                    outline-none
-                    transition
-                    focus:border-[#8B5A3C]
+                        rounded-3xl
+                        border
+                        border-[#ECE7E3]
+                        bg-white
+                        p-4
+                        shadow-sm
                     "
-                />
+                    >
+                    <div className="flex flex-col gap-3 md:flex-row">
+                        <input
+                        type="text"
+                        placeholder="Search users..."
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                            handleSearch();
+                            }
+                        }}
+                        className="
+                            flex-1
+                            rounded-2xl
+                            border
+                            border-[#ECE7E3]
+                            px-4
+                            py-2.5
+                            outline-none
+                            transition
+                            focus:border-[#8B5A3C]
+                        "
+                        />
+
+                        <button
+                        onClick={handleSearch}
+                        className="
+                            rounded-2xl
+                            bg-[#8B5A3C]
+                            px-4
+                            py-2.5
+                            text-sm
+                            font-medium
+                            text-white
+                            transition-all
+                            hover:bg-[#72452B]
+                        "
+                        >
+                        Search
+                        </button>
+                    </div>
                 </div>
 
                 <div
