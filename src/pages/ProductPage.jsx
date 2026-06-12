@@ -176,24 +176,31 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">
-          Product Management
-        </h1>
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-[#18181B]">
+            Product Management
+          </h1>
+        </div>
 
-        <p className="text-gray-500">
-          Manage products and inventory.
-        </p>
-      </div>
-
-      <div className="flex justify-end">
         <button
           onClick={() => {
             setEditingProduct(null);
             setShowModal(true);
           }}
-          className="rounded-lg bg-green-600 px-4 py-2 text-white"
+          className="
+            rounded-2xl
+            bg-[#8B5A3C]
+            px-5
+            py-2.5
+            text-sm
+            font-medium
+            text-white
+            transition-all
+            hover:bg-[#72452B]
+            shadow-sm
+          "
         >
           + Add Product
         </button>
@@ -201,24 +208,54 @@ export default function ProductPage() {
 
       {/* Search */}
 
-      <div className="flex flex-col gap-3 md:flex-row">
-        <input
-          type="text"
-          placeholder="Search product..."
-          value={searchInput}
-          onChange={(e) =>
-            setSearchInput(e.target.value)
-          }
-          onKeyDown={handleKeyDown}
-          className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-        />
+      <div
+        className="
+          rounded-3xl
+          border
+          border-[#ECE7E3]
+          bg-white
+          p-4
+          shadow-sm
+        "
+      >
+        <div className="flex flex-col gap-3 md:flex-row">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchInput}
+            onChange={(e) =>
+              setSearchInput(e.target.value)
+            }
+            onKeyDown={handleKeyDown}
+            className="
+              flex-1
+              rounded-2xl
+              border
+              border-[#ECE7E3]
+              bg-white
+              px-4
+              py-2.5
+              outline-none
+              transition
+              focus:border-[#8B5A3C]
+            "
+          />
 
-        <button
-          onClick={handleSearch}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-white"
-        >
-          Search
-        </button>
+          <button
+            onClick={handleSearch}
+            className="
+              rounded-2xl
+              bg-[#8B5A3C]
+              px-4
+              py-2.5
+              text-white
+              transition
+              hover:bg-[#72452B]
+            "
+          >
+            Search
+          </button>
+        </div>
       </div>
 
       {/* Loading */}
@@ -257,7 +294,16 @@ export default function ProductPage() {
 
       {
         successMessage && (
-          <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">
+          <div
+            className="
+              rounded-2xl
+              border
+              border-[#E8DDD6]
+              bg-[#FAF6F2]
+              p-4
+              text-[#8B5A3C]
+            "
+          >
             {successMessage}
           </div>
         )
@@ -269,27 +315,44 @@ export default function ProductPage() {
         !error &&
         products.length > 0 && (
           <>
-            <div className="overflow-x-auto rounded-xl border bg-white">
+            <div
+              className="
+                overflow-hidden
+                rounded-3xl
+                border
+                border-[#ECE7E3]
+                bg-white
+                shadow-sm
+              "
+            >
+              <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-gray-100 text-left">
-                    <th className="p-3">#</th>
-                    <th className="p-3">
+                <tr
+                  className="
+                    bg-[#FAF6F2]
+                    text-left
+                    text-sm
+                    text-[#71717A]
+                  "
+                >
+                    <th className="px-6 py-4 font-bold">#</th>
+                    <th className="px-6 py-4 font-bold">
                       Image
                     </th>
-                    <th className="p-3">
+                    <th className="px-6 py-4 font-bold">
                       Product
                     </th>
-                    <th className="p-3">
+                    <th className="px-6 py-4 font-bold">
                       Category
                     </th>
-                    <th className="p-3">
+                    <th className="px-6 py-4 font-bold">
                       Price
                     </th>
-                    <th className="p-3">
+                    <th className="px-6 py-4 font-bold">
                       Stock
                     </th>
-                    <th className="p-3">
+                    <th className="px-6 py-4 font-bold">
                       Actions
                     </th>
                   </tr>
@@ -300,44 +363,65 @@ export default function ProductPage() {
                     (product, index) => (
                       <tr
                         key={product.id}
-                        className="border-t"
+                        className="
+                          border-t
+                          border-[#F1EEEB]
+                          transition-colors
+                          hover:bg-[#FCFBFA]
+                        "
                       >
-                        <td className="p-3">
+                        <td className="px-6 py-4">
                           {(currentPage - 1) *
                             10 +
                             index +
                             1}
                         </td>
 
-                        <td className="p-3">
+                        <td className="px-6 py-4">
                           <img
                             src={getImageUrl(product.image)}
                             alt={product.name}
-                            className="h-12 w-12 rounded-lg border object-cover"
+                            className="
+                              h-14
+                              w-14
+                              rounded-xl
+                              border
+                              border-[#ECE7E3]
+                              object-cover
+                            "
                           />
                         </td>
 
-                        <td className="p-3">
+                        <td className="px-6 py-4">
                           {product.name}
                         </td>
 
-                        <td className="p-3">
+                        <td className="px-6 py-4">
                           {
                             product.category
                               ?.name
                           }
                         </td>
 
-                        <td className="p-3">
+                        <td className="px-6 py-4">
                           Rp {Number(product.price).toLocaleString("id-ID")}
                         </td>
 
-                        <td className="p-3">
-                          <span
-                            className={`rounded-full px-3 py-1 text-xs font-medium
+                        <td className="px-6 py-4">
+                        <span
+                          className={`
+                            inline-flex
+                            items-center
+                            rounded-full
+                            px-3
+                            py-1
+                            text-xs
+                            font-medium
                             ${
-                              product.stock <= 10
+                              product.stock === 0
                                 ? "bg-red-100 text-red-700"
+                                : product.stock <= 10
+                                ? "bg-amber-100 text-amber-700"
                                 : "bg-green-100 text-green-700"
                             }`}
                           >
@@ -345,8 +429,8 @@ export default function ProductPage() {
                           </span>
                         </td>
 
-                        <td className="p-3">
-                          <div className="flex gap-2">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
                             <button
                               onClick={() => {
                                 setEditingProduct({
@@ -358,7 +442,17 @@ export default function ProductPage() {
 
                                 setShowModal(true);
                               }}
-                              className="rounded-lg bg-amber-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-600"
+                              className="
+                                rounded-xl
+                                bg-[#FAF6F2]
+                                px-3
+                                py-2
+                                text-sm
+                                font-medium
+                                text-[#8B5A3C]
+                                transition
+                                hover:bg-[#F3ECE7]
+                              "
                             >
                               Edit
                             </button>
@@ -369,7 +463,17 @@ export default function ProductPage() {
                                   product.id
                                 )
                               }
-                              className="rounded bg-red-600 px-3 py-1 text-white"
+                              className="
+                                rounded-xl
+                                bg-red-50
+                                px-3
+                                py-2
+                                text-sm
+                                font-medium
+                                text-red-600
+                                transition
+                                hover:bg-red-100
+                              "
                             >
                               Delete
                             </button>
@@ -380,40 +484,59 @@ export default function ProductPage() {
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
 
             {/* Pagination */}
 
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-3">
               <button
-                disabled={
-                  currentPage === 1
-                }
+                disabled={currentPage === 1}
                 onClick={() =>
-                  setCurrentPage(
-                    currentPage - 1
-                  )
+                  setCurrentPage(currentPage - 1)
                 }
-                className="rounded-lg border px-4 py-2 disabled:opacity-50"
+                className="
+                  rounded-xl
+                  border
+                  border-[#ECE7E3]
+                  bg-white
+                  px-4
+                  py-2
+                  text-sm
+                  disabled:opacity-50
+                "
               >
                 Previous
               </button>
 
-              <span>
-                Page {currentPage} of{" "}
-                {lastPage}
-              </span>
+              <div
+                className="
+                  rounded-xl
+                  bg-[#FAF6F2]
+                  px-4
+                  py-2
+                  text-sm
+                  text-[#8B5A3C]
+                "
+              >
+                Page {currentPage} of {lastPage}
+              </div>
 
               <button
-                disabled={
-                  currentPage === lastPage
-                }
+                disabled={currentPage === lastPage}
                 onClick={() =>
-                  setCurrentPage(
-                    currentPage + 1
-                  )
+                  setCurrentPage(currentPage + 1)
                 }
-                className="rounded-lg border px-4 py-2 disabled:opacity-50"
+                className="
+                  rounded-xl
+                  border
+                  border-[#ECE7E3]
+                  bg-white
+                  px-4
+                  py-2
+                  text-sm
+                  disabled:opacity-50
+                "
               >
                 Next
               </button>

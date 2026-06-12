@@ -230,9 +230,9 @@ export default function CategoryPage() {
             Category Management
           </h1>
   
-          <p className="mt-1 text-sm text-zinc-500">
+          {/* <p className="mt-1 text-sm text-zinc-500">
             Manage product categories
-          </p>
+          </p> */}
         </div>
   
         <button
