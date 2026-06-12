@@ -344,6 +344,7 @@ export default function DashboardPage() {
         })}
       </section>
       
+      {user?.role === "admin" && (
       <section className="rounded-3xl border border-[#ECE7E3] bg-[#FCFBFA] p-8 shadow-sm">
         <div className="mb-8 flex flex-col items-center">
           <div className="flex items-center gap-2">
@@ -532,6 +533,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }

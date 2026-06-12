@@ -330,60 +330,60 @@ export default function UserPage() {
             </div>
 
             <div className="flex items-center justify-center gap-3">
-  <button
-    disabled={page === 1}
-    onClick={() =>
-      setPage((prev) => prev - 1)
-    }
-    className="
-      rounded-xl
-      border
-      border-[#ECE7E3]
-      bg-white
-      px-4
-      py-2
-      text-sm
-      disabled:opacity-50
-    "
-  >
-    Previous
-  </button>
+                <button
+                    disabled={page === 1}
+                    onClick={() =>
+                    setPage((prev) => prev - 1)
+                    }
+                    className="
+                    rounded-xl
+                    border
+                    border-[#ECE7E3]
+                    bg-white
+                    px-4
+                    py-2
+                    text-sm
+                    disabled:opacity-50
+                    "
+                >
+                    Previous
+                </button>
 
-  <div
-    className="
-      rounded-xl
-      bg-[#FAF6F2]
-      px-4
-      py-2
-      text-sm
-      text-[#8B5A3C]
-    "
-  >
-    Page {pagination.current_page} of{" "}
-    {pagination.last_page}
-  </div>
+                <div
+                    className="
+                    rounded-xl
+                    bg-[#FAF6F2]
+                    px-4
+                    py-2
+                    text-sm
+                    text-[#8B5A3C]
+                    "
+                >
+                    Page {pagination.current_page} of{" "}
+                    {pagination.last_page}
+                </div>
 
-  <button
-    disabled={
-      page === pagination.last_page
-    }
-    onClick={() =>
-      setPage((prev) => prev + 1)
-    }
-    className="
-      rounded-xl
-      border
-      border-[#ECE7E3]
-      bg-white
-      px-4
-      py-2
-      text-sm
-      disabled:opacity-50
-    "
-  >
-    Next
-  </button>
-</div>
+                <button
+                    disabled={
+                    page === pagination.last_page
+                    }
+                    onClick={() =>
+                    setPage((prev) => prev + 1)
+                    }
+                    className="
+                    rounded-xl
+                    border
+                    border-[#ECE7E3]
+                    bg-white
+                    px-4
+                    py-2
+                    text-sm
+                    disabled:opacity-50
+                    "
+                >
+                    Next
+                </button>
+            </div>
 
             {
                 showCreateModal && (
