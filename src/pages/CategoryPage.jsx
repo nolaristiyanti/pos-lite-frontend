@@ -315,24 +315,7 @@ export default function CategoryPage() {
           bg-white
           shadow-sm
         "
-      >
-        {/* <div
-          className="
-            flex items-center justify-between
-            border-b border-[#ECE7E3]
-            bg-white
-            px-6 py-5
-          "
-        >
-          <h2 className="font-semibold text-zinc-900">
-            Category List
-          </h2>
-  
-          <span className="text-sm text-zinc-500">
-            {total} categories
-          </span>
-        </div> */}
-  
+      > 
         {categories.length === 0 ? (
           <div className="p-12 text-center text-zinc-500">
             No categories found
@@ -468,61 +451,71 @@ export default function CategoryPage() {
               </table>
             </div>
   
-            {/* Pagination */}
-  
-            <div className="flex items-center justify-between border-t border-[#ECE7E3] p-4">
-              <button
-                disabled={currentPage === 1}
-                onClick={() =>
-                  setCurrentPage(currentPage - 1)
-                }
-                className="
-                  rounded-xl
-                  border border-[#ECE7E3]
-                  bg-white
-                  px-4 py-2
-                  text-sm
-                  font-medium
-                  text-zinc-700
-                  transition
-                  hover:border-[#D8B89C]
-                  hover:bg-[#FAF6F2]
-                  disabled:opacity-50
-                "
-              >
-                Previous
-              </button>
-  
-              <span className="text-sm text-zinc-500">
-                Page {currentPage} of {lastPage}
-              </span>
-  
-              <button
-                disabled={
-                  currentPage === lastPage
-                }
-                onClick={() =>
-                  setCurrentPage(currentPage + 1)
-                }
-                className="
-                  rounded-xl
-                  border border-[#ECE7E3]
-                  bg-white
-                  px-4 py-2
-                  text-sm
-                  font-medium
-                  text-zinc-700
-                  transition
-                  hover:border-[#D8B89C]
-                  hover:bg-[#FAF6F2]
-                  disabled:opacity-50
-                "
-              >
-                Next
-              </button>
-            </div>
+            
           </>
         )}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-center gap-3">
+        <button
+          disabled={currentPage === 1}
+          onClick={() =>
+            setCurrentPage(currentPage - 1)
+          }
+          className="
+            rounded-xl
+            border border-[#ECE7E3]
+            bg-white
+            px-4 py-2
+            text-sm
+            font-medium
+            text-zinc-700
+            transition
+            hover:border-[#D8B89C]
+            hover:bg-[#FAF6F2]
+            disabled:opacity-50
+          "
+        >
+          Previous
+        </button>
+
+        <div
+          className="
+            rounded-xl
+            bg-[#FAF6F2]
+            px-4
+            py-2
+            text-sm
+            text-[#8B5A3C]
+          "
+        >
+          Page {currentPage} of {lastPage}
+        </div>
+  
+        <button
+          disabled={
+            currentPage === lastPage
+          }
+          onClick={() =>
+            setCurrentPage(currentPage + 1)
+          }
+          className="
+            rounded-xl
+            border border-[#ECE7E3]
+            bg-white
+            px-4 py-2
+            text-sm
+            font-medium
+            text-zinc-700
+            transition
+            hover:border-[#D8B89C]
+            hover:bg-[#FAF6F2]
+            disabled:opacity-50
+          "
+        >
+          Next
+        </button>
       </div>
   
       {/* Modal */}
