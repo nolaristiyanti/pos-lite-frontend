@@ -27,21 +27,21 @@ const TransactionDetailModal = ({
   const transactionDate = new Date(
     transaction.created_at
   );
-  
+
   const year =
     transactionDate.getFullYear();
-  
+
   const month = String(
     transactionDate.getMonth() + 1
   ).padStart(2, "0");
-  
+
   const day = String(
     transactionDate.getDate()
   ).padStart(2, "0");
-  
+
   const datePart =
     `${year}${month}${day}`;
-  
+
   const orderNumber =
     `ORD-${datePart}-${String(
       transaction.id
@@ -57,31 +57,40 @@ const TransactionDetailModal = ({
         className="
           w-full
           max-w-md
-          rounded-xl
+          overflow-hidden
+          rounded-3xl
+          border
+          border-[#ECE7E3]
           bg-white
           shadow-2xl
           print:max-w-lg
+          print:border-0
           print:shadow-none
         "
       >
-
         {/* Header */}
-        <div className="print-hidden border-b p-4">
+        <div className="print-hidden border-b border-[#ECE7E3] p-5">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold">
-              ☕ Coffee Shop Receipt
+            <h2 className="font-semibold text-[#18181B]">
+              BrewPOS Receipt
             </h2>
 
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="
+                rounded-lg
+                p-2
+                text-[#71717A]
+                transition
+                hover:bg-[#FAF6F2]
+              "
             >
               ✕
             </button>
           </div>
         </div>
 
-        {/* Printable Area */}
+        {/* Receipt */}
         <div
           id="receipt-content"
           className="
@@ -91,19 +100,20 @@ const TransactionDetailModal = ({
             print:text-base
           "
         >
-
+          {/* Logo */}
           <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-wide">
-              ☕ POS LITE COFFEE
+            <h1 className="text-3xl font-bold tracking-wide text-[#4B2E2B]">
+              ☕ BREWPOS
             </h1>
 
-            <p className="mt-2 text-sm text-gray-500">
-              Modern Coffee Shop POS
+            <p className="mt-2 text-sm text-[#71717A]">
+              Smart POS for Modern Business
             </p>
           </div>
 
-          <div className="my-4 border-t border-dashed" />
+          <div className="my-5 border-t border-dashed border-[#D6D3D1]" />
 
+          {/* Transaction Info */}
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Order No</span>
@@ -135,25 +145,33 @@ const TransactionDetailModal = ({
               <span>Payment</span>
 
               <span className="uppercase">
-                {transaction.payment_method}
+                {
+                  transaction.payment_method
+                }
               </span>
             </div>
           </div>
 
-          <div className="my-4 border-t border-dashed" />
+          <div className="my-5 border-t border-dashed border-[#D6D3D1]" />
 
+          {/* Items */}
           <div className="space-y-3">
             {transaction.details?.map(
               (item, index) => (
                 <div
                   key={index}
-                  className="border-b border-dashed pb-3"
+                  className="
+                    border-b
+                    border-dashed
+                    border-[#D6D3D1]
+                    pb-3
+                  "
                 >
                   <div className="font-semibold">
                     {item.product?.name}
                   </div>
 
-                  <div className="mt-1 flex justify-between text-gray-600">
+                  <div className="mt-1 flex justify-between text-[#71717A]">
                     <span>
                       {item.quantity} × Rp{" "}
                       {formatCurrency(
@@ -174,15 +192,16 @@ const TransactionDetailModal = ({
             )}
           </div>
 
-          <div className="my-4 border-t border-dashed" />
+          <div className="my-5 border-t border-dashed border-[#D6D3D1]" />
 
-          <div className="rounded-lg bg-gray-50 p-4">
+          {/* Total */}
+          <div className="rounded-xl bg-[#FAF6F2] p-5">
             <div className="text-center">
-              <p className="text-xs uppercase tracking-wider text-gray-500">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#71717A]">
                 Total Payment
               </p>
 
-              <p className="mt-2 text-3xl font-bold">
+              <p className="mt-3 text-3xl font-bold text-[#8B5A3C]">
                 Rp{" "}
                 {formatCurrency(
                   transaction.total_price
@@ -191,10 +210,11 @@ const TransactionDetailModal = ({
             </div>
           </div>
 
-          <div className="my-4 border-t border-dashed" />
+          <div className="my-5 border-t border-dashed border-[#D6D3D1]" />
 
-          <div className="text-center text-gray-600">
-            <p className="font-medium">
+          {/* Footer */}
+          <div className="text-center text-[#71717A]">
+            <p className="font-medium text-[#4B2E2B]">
               ☕ Thank You For Visiting
             </p>
 
@@ -202,31 +222,51 @@ const TransactionDetailModal = ({
               See You Again
             </p>
 
-            <p className="mt-3 text-xs text-gray-400">
-              POS Lite Coffee Shop
+            <p className="mt-4 text-xs text-[#A1A1AA]">
+              BrewPOS
             </p>
           </div>
         </div>
 
-        {/* Buttons */}
-        <div className="print-hidden border-t p-4">
+        {/* Footer Buttons */}
+        <div className="print-hidden border-t border-[#ECE7E3] p-5">
           <div className="flex gap-3">
             <button
               onClick={handlePrint}
-              className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              className="
+                flex-1
+                rounded-xl
+                bg-[#8B5A3C]
+                px-4
+                py-2.5
+                font-medium
+                text-white
+                transition
+                hover:bg-[#72452B]
+              "
             >
               Print Receipt
             </button>
 
             <button
               onClick={onClose}
-              className="flex-1 rounded-lg border px-4 py-2 hover:bg-gray-50"
+              className="
+                flex-1
+                rounded-xl
+                border
+                border-[#ECE7E3]
+                px-4
+                py-2.5
+                font-medium
+                text-[#18181B]
+                transition
+                hover:bg-[#FAF6F2]
+              "
             >
               Close
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );
