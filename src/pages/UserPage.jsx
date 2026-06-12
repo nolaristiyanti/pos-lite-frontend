@@ -144,40 +144,88 @@ export default function UserPage() {
 
                 <button
                     onClick={() => setShowCreateModal(true)}
-                    className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+                    className="
+                        rounded-2xl
+                        bg-[#8B5A3C]
+                        px-5
+                        py-2.5
+                        text-sm
+                        font-medium
+                        text-white
+                        shadow-sm
+                        transition-all
+                        hover:bg-[#72452B]
+                        "
                 >
                     + Add User
                 </button>
                 </div>
 
-            <input
-                type="text"
-                placeholder="Search user..."
-                value={search}
-                onChange={(e) => {
+                <div
+                className="
+                    rounded-3xl
+                    border
+                    border-[#ECE7E3]
+                    bg-white
+                    p-6
+                    shadow-sm
+                "
+                >
+
+                <input
+                    type="text"
+                    placeholder="Search users..."
+                    value={search}
+                    onChange={(e) => {
                     setSearch(e.target.value);
                     setPage(1);
-                }}
-                className="w-full rounded border p-2"
-            />
+                    }}
+                    className="
+                    w-full
+                    rounded-2xl
+                    border
+                    border-[#ECE7E3]
+                    px-4
+                    py-3
+                    outline-none
+                    transition
+                    focus:border-[#8B5A3C]
+                    "
+                />
+                </div>
 
-            <div className="overflow-x-auto rounded-lg border bg-white">
+                <div
+                className="
+                    overflow-hidden
+                    rounded-3xl
+                    border
+                    border-[#ECE7E3]
+                    bg-white
+                    shadow-sm
+                "
+                >
+                <div className="overflow-x-auto">
                 <table className="w-full">
                 <thead>
-                    <tr className="bg-gray-100">
-                        <th className="p-3 text-left">
+                <tr
+                    className="
+                        bg-[#FAF6F2]
+                        text-[#71717A]
+                    "
+                >
+                        <th className="px-6 py-4 text-left font-medium text-left">
                             Name
                         </th>
 
-                        <th className="p-3 text-left">
+                        <th className="px-6 py-4 text-left font-medium text-left">
                             Email
                         </th>
 
-                        <th className="p-3 text-left">
+                        <th className="px-6 py-4 text-left font-medium text-left">
                             Role
                         </th>
 
-                        <th className="p-3 text-left">
+                        <th className="px-6 py-4 text-left font-medium text-left">
                             Actions
                         </th>
                     </tr>
@@ -197,27 +245,58 @@ export default function UserPage() {
                             users.map((user) => (
                                 <tr
                                     key={user.id}
-                                    className="border-t"
+                                    className="
+                                        border-t
+                                        border-[#F1EEEB]
+                                        transition-colors
+                                        hover:bg-[#FCFBFA]
+                                    "
                                 >
-                                    <td className="p-3">
+                                    <td className="px-6 py-4">
                                         {user.name}
                                     </td>
 
-                                    <td className="p-3">
+                                    <td className="px-6 py-4">
                                         {user.email}
                                     </td>
 
-                                    <td className="p-3 capitalize">
-                                        {user.role}
+                                    <td className="px-6 py-4">
+                                        <span
+                                            className={`
+                                            inline-flex
+                                            rounded-full
+                                            px-3
+                                            py-1
+                                            text-xs
+                                            font-medium
+                                            ${
+                                                user.role === "admin"
+                                                ? "bg-[#FAF6F2] text-[#8B5A3C]"
+                                                : "bg-blue-50 text-blue-700"
+                                            }
+                                            `}
+                                        >
+                                            {user.role}
+                                        </span>
                                     </td>
 
-                                    <td className="p-3">
+                                    <td className="px-6 py-4">
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() =>
                                                     handleEditClick(user)
                                                 }
-                                                className="rounded bg-yellow-500 px-3 py-1 text-white"
+                                                className="
+                                                rounded-xl
+                                                bg-[#FAF6F2]
+                                                px-3
+                                                py-2
+                                                text-sm
+                                                font-medium
+                                                text-[#8B5A3C]
+                                                transition
+                                                hover:bg-[#F3ECE7]
+                                              "
                                             >
                                                 Edit
                                             </button>
@@ -226,7 +305,17 @@ export default function UserPage() {
                                                 onClick={() =>
                                                     handleDeleteUser(user)
                                                 }
-                                                className="rounded bg-red-500 px-3 py-1 text-white"
+                                                className="
+                                                rounded-xl
+                                                bg-red-50
+                                                px-3
+                                                py-2
+                                                text-sm
+                                                font-medium
+                                                text-red-600
+                                                transition
+                                                hover:bg-red-100
+                                                "
                                             >
                                                 Delete
                                             </button>
@@ -237,36 +326,64 @@ export default function UserPage() {
                         )}
                     </tbody>
                 </table>
+                </div>
             </div>
 
-            <div className="flex gap-2">
-                <button
-                    disabled={page === 1}
-                    onClick={() =>
-                        setPage((prev) => prev - 1)
-                    }
-                    className="rounded border px-3 py-2"
-                >
-                    Prev
-                </button>
+            <div className="flex items-center justify-center gap-3">
+  <button
+    disabled={page === 1}
+    onClick={() =>
+      setPage((prev) => prev - 1)
+    }
+    className="
+      rounded-xl
+      border
+      border-[#ECE7E3]
+      bg-white
+      px-4
+      py-2
+      text-sm
+      disabled:opacity-50
+    "
+  >
+    Previous
+  </button>
 
-                <span className="px-2 py-2">
-                    {pagination.current_page} /{" "}
-                    {pagination.last_page}
-                </span>
+  <div
+    className="
+      rounded-xl
+      bg-[#FAF6F2]
+      px-4
+      py-2
+      text-sm
+      text-[#8B5A3C]
+    "
+  >
+    Page {pagination.current_page} of{" "}
+    {pagination.last_page}
+  </div>
 
-                <button
-                    disabled={
-                        page === pagination.last_page
-                    }
-                    onClick={() =>
-                        setPage((prev) => prev + 1)
-                    }
-                    className="rounded border px-3 py-2"
-                >
-                    Next
-                </button>
-            </div>
+  <button
+    disabled={
+      page === pagination.last_page
+    }
+    onClick={() =>
+      setPage((prev) => prev + 1)
+    }
+    className="
+      rounded-xl
+      border
+      border-[#ECE7E3]
+      bg-white
+      px-4
+      py-2
+      text-sm
+      disabled:opacity-50
+    "
+  >
+    Next
+  </button>
+</div>
 
             {
                 showCreateModal && (

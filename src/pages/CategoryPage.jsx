@@ -333,7 +333,7 @@ export default function CategoryPage() {
                   >
                     <th
                       className="
-                        px-6 py-3
+                        px-6 py-4
                         text-left
                         text-xs
                         font-bold
@@ -347,7 +347,7 @@ export default function CategoryPage() {
   
                     <th
                       className="
-                        px-6 py-3
+                        px-6 py-4
                         text-left
                         text-xs
                         font-bold
@@ -361,7 +361,7 @@ export default function CategoryPage() {
   
                     <th
                       className="
-                        px-6 py-3
+                        px-6 py-4
                         text-left
                         text-xs
                         font-bold
