@@ -287,7 +287,7 @@ export default function UserPage() {
                                         {user.email}
                                     </td>
 
-                                    <td className="px-6 py-4 text-center">
+                                    <td className="px-6 py-4">
                                         <span
                                             className={`
                                             inline-flex
@@ -356,7 +356,7 @@ export default function UserPage() {
                 </div>
             </div>
 
-            <div className="flex items-center justify-center gap-3">
+            {/* <div className="flex items-center justify-center gap-3">
                 <button
                     disabled={page === 1}
                     onClick={() =>
@@ -410,6 +410,65 @@ export default function UserPage() {
                 >
                     Next
                 </button>
+            </div> */}
+
+            <div className="px-4">
+                <div className="flex items-center justify-between">
+                <p className="text-sm text-[#71717A]">
+                    Page {pagination.current_page} of{" "}
+                    {pagination.last_page}
+                </p>
+
+                <div className="flex items-center gap-2">
+                    <button
+                        disabled={page === 1}
+                        onClick={() =>
+                        setPage((prev) => prev - 1)
+                        }
+                        className="
+                            rounded-xl
+                            border
+                            border-[#ECE7E3]
+                            bg-white
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            text-[#18181B]
+                            transition
+                            hover:bg-[#FAF6F2]
+                            disabled:cursor-not-allowed
+                            disabled:opacity-50
+                        "
+                        >
+                        Previous
+                    </button>
+
+                    <button
+                        disabled={
+                        page === pagination.last_page
+                        }
+                        onClick={() =>
+                        setPage((prev) => prev + 1)
+                        }
+                    className="
+                        rounded-xl
+                        bg-[#8B5A3C]
+                        px-4
+                        py-2
+                        text-sm
+                        font-medium
+                        text-white
+                        transition
+                        hover:bg-[#72452B]
+                        disabled:cursor-not-allowed
+                        disabled:bg-[#D6C2B3]
+                    "
+                    >
+                    Next
+                    </button>
+                </div>
+                </div>
             </div>
 
             {

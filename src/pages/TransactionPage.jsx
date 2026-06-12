@@ -1085,45 +1085,77 @@ export default function TransactionPage() {
         }
       />
 
-      <div className="flex items-center justify-center gap-2">
-        <button
-          onClick={() =>
-            setTransactionPage(
-              (prev) =>
-                Math.max(prev - 1, 1)
-            )
-          }
-          disabled={
-            transactionPage === 1
-          }
-          className="rounded border px-3 py-2 disabled:bg-gray-100"
-        >
-          Prev
-        </button>
+      <div
+        className="px-4"
+      >
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-[#71717A]">
+            Page {transactionPage} of{" "}
+            {transactionLastPage}
+          </p>
 
-        <span>
-          Page {transactionPage} of{" "}
-          {transactionLastPage}
-        </span>
-
-        <button
-          onClick={() =>
-            setTransactionPage(
-              (prev) =>
-                Math.min(
-                  prev + 1,
-                  transactionLastPage
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() =>
+                setTransactionPage(
+                  (prev) =>
+                    Math.max(prev - 1, 1)
                 )
-            )
-          }
-          disabled={
-            transactionPage ===
-            transactionLastPage
-          }
-          className="rounded border px-3 py-2 disabled:bg-gray-100"
-        >
-          Next
-        </button>
+              }
+              disabled={
+                transactionPage === 1
+              }
+              className="
+                rounded-xl
+                border
+                border-[#ECE7E3]
+                bg-white
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-[#18181B]
+                transition
+                hover:bg-[#FAF6F2]
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+              "
+            >
+              Previous
+            </button>
+
+            <button
+              onClick={() =>
+                setTransactionPage(
+                  (prev) =>
+                    Math.min(
+                      prev + 1,
+                      transactionLastPage
+                    )
+                )
+              }
+              disabled={
+                transactionPage ===
+                transactionLastPage
+              }
+              className="
+                rounded-xl
+                bg-[#8B5A3C]
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-white
+                transition
+                hover:bg-[#72452B]
+                disabled:cursor-not-allowed
+                disabled:bg-[#D6C2B3]
+              "
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
 
       <TransactionDetailModal

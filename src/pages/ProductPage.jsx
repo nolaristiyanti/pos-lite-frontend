@@ -491,7 +491,7 @@ export default function ProductPage() {
 
             {/* Pagination */}
 
-            <div className="flex items-center justify-center gap-3">
+            {/* <div className="flex items-center justify-center gap-3">
               <button
                 disabled={currentPage === 1}
                 onClick={() =>
@@ -542,6 +542,63 @@ export default function ProductPage() {
               >
                 Next
               </button>
+            </div> */}
+
+            <div className="px-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-[#71717A]">
+                    Page {currentPage} of{" "}
+                    {lastPage}
+                </p>
+
+                <div className="flex items-center gap-2">
+                    <button
+                        disabled={currentPage === 1}
+                        onClick={() =>
+                          setCurrentPage(currentPage - 1)
+                        }
+                        className="
+                            rounded-xl
+                            border
+                            border-[#ECE7E3]
+                            bg-white
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            text-[#18181B]
+                            transition
+                            hover:bg-[#FAF6F2]
+                            disabled:cursor-not-allowed
+                            disabled:opacity-50
+                        "
+                        >
+                        Previous
+                    </button>
+
+                    <button
+                        disabled={currentPage === lastPage}
+                        onClick={() =>
+                          setCurrentPage(currentPage + 1)
+                        }
+                    className="
+                        rounded-xl
+                        bg-[#8B5A3C]
+                        px-4
+                        py-2
+                        text-sm
+                        font-medium
+                        text-white
+                        transition
+                        hover:bg-[#72452B]
+                        disabled:cursor-not-allowed
+                        disabled:bg-[#D6C2B3]
+                    "
+                    >
+                      Next
+                    </button>
+                </div>
+              </div>
             </div>
           </>
         )}
