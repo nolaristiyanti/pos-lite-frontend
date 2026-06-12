@@ -344,7 +344,7 @@ export default function DashboardPage() {
         })}
       </section>
       
-      <section className="rounded-[32px] border border-[#DCC5AF] bg-gradient-to-br from-[#FFF9F2] to-white p-8 shadow-sm">
+      <section className="rounded-3xl border border-[#ECE7E3] bg-[#FCFBFA] p-8 shadow-sm">
         <div className="mb-8 flex flex-col items-center">
           <div className="flex items-center gap-2">
           <div className="relative h-5 w-4 rotate-12">
@@ -420,42 +420,6 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm">
-            <div
-              className="
-                mb-4
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-xl
-                bg-[#F8F4EE]
-              "
-            >
-              <CreditCard
-                size={22}
-                className="text-[#8B5E3C]"
-              />
-            </div>
-
-            <h3 className="font-semibold text-[#4B2E2B]">
-              Average Order Value
-            </h3>
-
-            <p className="mt-3 text-2xl font-bold text-[#4B2E2B]">
-              {formatCurrency(
-                stats.averageOrderValue
-              )}
-            </p>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Average customer
-              spending per
-              transaction.
-            </p>
-          </div> */}
-
           <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm
             transition-all
             duration-300
@@ -525,38 +489,6 @@ export default function DashboardPage() {
                 </p>
               </>
             )}
-
-            {/* <p
-              className={`mt-3 text-2xl font-bold ${
-                stats.revenueTrend?.direction ===
-                "up"
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}
-            >
-              {stats.revenueTrend?.direction ===
-              "up"
-                ? "↑"
-                : "↓"}{" "}
-              {Math.abs(
-                stats.revenueTrend?.percentage ?? 0
-              )}
-              %
-            </p>
-
-            <p className="mt-2 text-sm text-gray-500">
-              {stats.revenueTrend?.difference >= 0
-                ? "+"
-                : "-"}
-              {" "}
-              {formatCurrency(
-                Math.abs(
-                  stats.revenueTrend?.difference ?? 0
-                )
-              )}
-              {" "}
-              vs yesterday
-            </p> */}
           </div>
 
           <div className="rounded-[28px] border border-[#E9DED2] bg-white p-6 shadow-sm
