@@ -8,6 +8,7 @@ import {
 
 import TransactionHistory from "../components/TransactionHistory";
 import TransactionDetailModal from "../components/TransactionDetailModal";
+import { ShoppingCart } from "lucide-react";
 
 
 export default function TransactionPage() {
@@ -45,6 +46,15 @@ export default function TransactionPage() {
 
   const [paymentFilter, setPaymentFilter,] = useState("");
 
+  const today = new Date()
+  .toLocaleDateString("en-CA");
+
+  const [startDate, setStartDate] =
+    useState(today);
+
+  const [endDate, setEndDate] =
+    useState(today);
+
   useEffect(() => {
     fetchProducts(currentPage, search);
   }, [currentPage, search]);
@@ -52,12 +62,11 @@ export default function TransactionPage() {
   useEffect(() => {
     fetchTransactions(
       transactionPage,
-      paymentFilter
+      paymentFilter,
+      startDate,
+      endDate
     );
-  }, [
-    transactionPage,
-    paymentFilter,
-  ]);
+  }, [transactionPage]);
 
   useEffect(() => {
     if (!successMessage) return;
@@ -68,6 +77,30 @@ export default function TransactionPage() {
 
     return () => clearTimeout(timer);
   }, [successMessage]);
+
+  const handleStartDateChange = (
+    value
+  ) => {
+    setStartDate(value);
+  
+    if (
+      endDate &&
+      value > endDate
+    ) {
+      setEndDate(value);
+    }
+  };
+
+  const handleApplyFilter = () => {
+    setTransactionPage(1);
+  
+    fetchTransactions(
+      1,
+      paymentFilter,
+      startDate,
+      endDate
+    );
+  };
 
   const fetchProducts = async (
     page = currentPage,
@@ -104,11 +137,11 @@ export default function TransactionPage() {
     }
   };
 
-  const fetchTransactions =
-  async (
+  const fetchTransactions = async (
     page = 1,
-    paymentMethod =
-      paymentFilter
+    paymentMethod = paymentFilter,
+    start = startDate,
+    end = endDate
   ) => {
     try {
       setTransactionLoading(
@@ -118,7 +151,9 @@ export default function TransactionPage() {
       const response =
         await getTransactions(
           page,
-          paymentMethod
+          paymentMethod,
+          start,
+          end
         );
 
       setTransactions(
@@ -311,24 +346,22 @@ export default function TransactionPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Transaction Management
-        </h1>
+      {/* <h1 className="text-3xl font-bold tracking-tight">
+        Transaction Management
+      </h1> */}
 
-        <p className="mt-1 text-gray-500">
-          Manage sales transactions and monitor transaction history.
-        </p>
-      </div>
+      {/* <p className="mt-1 text-gray-500">
+        Manage sales transactions and monitor transaction history.
+      </p> */}
 
       {successMessage && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4 text-green-700">
+        <div className="rounded-2xl border border-green-200 bg-white p-4 text-green-700">
           {successMessage}
         </div>
       )}
 
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-600">
+        <div className="rounded-2xl border border-red-200 bg-white p-4 text-red-600">
           {error}
         </div>
       )}
@@ -380,9 +413,15 @@ export default function TransactionPage() {
 
             {cartItems.length === 0 ? (
               <div className="py-12 text-center">
-                <p className="text-sm font-medium text-[#18181B]">
+                
+
+                <div className="mt-1 text-sm text-[#71717A] flex items-center justify-center">
+                <ShoppingCart/>
+                </div>
+
+                {/* <p className="text-sm font-medium text-[#18181B]">
                   Your cart is empty
-                </p>
+                </p> */}
 
                 <p className="mt-1 text-sm text-[#71717A]">
                   Select products to start a transaction
@@ -920,21 +959,87 @@ export default function TransactionPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border bg-white p-4 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <h2 className="font-semibold">
+      <div
+        className="
+          rounded-3xl
+          border
+          border-[#ECE7E3]
+          bg-white
+          p-6
+          shadow-sm
+        "
+      >
+        <div className="mb-5">
+          <h2 className="font-semibold text-[#18181B]">
             Transaction Filters
           </h2>
 
+          <p className="mt-1 text-sm text-[#71717A]">
+            Filter transaction history by date range and payment method
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-4">
+          <input
+            type="date"
+            value={startDate}
+            max={today}
+            onChange={(e) =>
+              handleStartDateChange(
+                e.target.value
+              )
+            }
+            className="
+              rounded-2xl
+              border
+              border-[#ECE7E3]
+              px-4
+              py-3
+              outline-none
+              transition
+              focus:border-[#8B5A3C]
+            "
+          />
+
+          <input
+            type="date"
+            value={endDate}
+            min={startDate}
+            max={today}
+            onChange={(e) =>
+              setEndDate(
+                e.target.value
+              )
+            }
+            className="
+              rounded-2xl
+              border
+              border-[#ECE7E3]
+              px-4
+              py-3
+              outline-none
+              transition
+              focus:border-[#8B5A3C]
+            "
+          />
+
           <select
             value={paymentFilter}
-            onChange={(e) => {
-              setTransactionPage(1);
+            onChange={(e) =>
               setPaymentFilter(
                 e.target.value
-              );
-            }}
-            className="rounded-lg border px-3 py-2"
+              )
+            }
+            className="
+              rounded-2xl
+              border
+              border-[#ECE7E3]
+              px-4
+              py-3
+              outline-none
+              transition
+              focus:border-[#8B5A3C]
+            "
           >
             <option value="">
               All Payment Methods
@@ -952,6 +1057,23 @@ export default function TransactionPage() {
               Bank Transfer
             </option>
           </select>
+
+          <button
+            onClick={handleApplyFilter}
+            className="
+              rounded-2xl
+              bg-[#8B5A3C]
+              px-4
+              py-3
+              text-sm
+              font-medium
+              text-white
+              transition-all
+              hover:bg-[#72452B]
+            "
+          >
+            Apply Filter
+          </button>
         </div>
       </div>
 

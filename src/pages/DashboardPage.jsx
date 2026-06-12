@@ -68,36 +68,32 @@ export default function DashboardPage() {
       if (user?.role === "cashier") {
         const response =
           await getCashierSummary();
-  
-          setStats({
-            todaySales:
-              response?.data?.today_sales || 0,
-          
-            todayTransactions:
-              response?.data?.today_transactions || 0,
-          
-            monthlyRevenue:
-              response?.data?.monthly_revenue || 0,
-          
-            lowStockAlerts:
-              response?.data?.low_stock_alerts || 0,
-          
-            averageOrderValue:
-              response?.data?.average_order_value || 0,
-          
-            topSellingProduct:
-              response?.data?.top_selling_product || null,
-          
-            peakSalesHour:
-              response?.data?.peak_sales_hour || null,
-          
-            revenueTrend:
-              response?.data?.revenue_trend || {
-                percentage: 0,
-                direction: "up",
-                difference: 0,
-              },
-          });
+      
+        console.log(response);
+      
+        setStats({
+          todaySales:
+            response?.data?.my_sales_today || 0,
+      
+          todayTransactions:
+            response?.data?.my_transactions_today || 0,
+      
+          monthlyRevenue: 0,
+      
+          lowStockAlerts: 0,
+      
+          averageOrderValue: 0,
+      
+          topSellingProduct: null,
+      
+          peakSalesHour: null,
+      
+          revenueTrend: {
+            percentage: 0,
+            direction: "up",
+            difference: 0,
+          },
+        });
       } else {
         const response =
           await getDashboardSummary();
