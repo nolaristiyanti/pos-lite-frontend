@@ -279,14 +279,39 @@ export default function CategoryPage() {
 
       {/* Table */}
 
-      <div className="bg-white rounded-xl shadow">
-        <div className="flex justify-between items-center p-5 border-b">
-          <h2 className="font-semibold">
+      <div
+        className="
+          bg-[#F6F4EE]
+          border border-[#E9DED2]
+          rounded-2xl
+          overflow-hidden
+        "
+      >
+        <div
+          className="
+            flex justify-between items-center
+            px-5 py-4
+            bg-[#F6F4EE]
+            border-b border-[#E9DED2]
+          "
+        >
+          <h2
+            className="
+              font-semibold
+              text-[#4B2E2B]
+            "
+          >
             Category List
           </h2>
 
-          <span className="text-sm text-gray-500">
-            Total: {total}
+          <span
+            className="
+              text-xs
+              font-medium
+              text-[#7A523B]
+            "
+          >
+            {total} categories
           </span>
         </div>
 
@@ -296,12 +321,12 @@ export default function CategoryPage() {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="p-4 text-left">
-                      ID
+                      #
                     </th>
 
                     <th className="p-4 text-left">
@@ -316,13 +341,13 @@ export default function CategoryPage() {
 
                 <tbody>
                   {categories.map(
-                    (category) => (
+                    (category, index) => (
                       <tr
                         key={category.id}
                         className="border-t hover:bg-gray-50"
                       >
                         <td className="p-4">
-                          {category.id}
+                          {(currentPage - 1) * 10 + index + 1}
                         </td>
 
                         <td className="p-4">
@@ -355,6 +380,274 @@ export default function CategoryPage() {
                   )}
                 </tbody>
               </table>
+            </div> */}
+
+            {/* <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="bg-[#F8F4EE] border-b border-[#EADBC8]">
+                      <th className="p-4 text-left">
+                        #
+                      </th>
+
+                      <th className="p-4 text-left">
+                        Category Name
+                      </th>
+
+                      <th className="p-4 text-left">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {categories.map(
+                      (category, index) => (
+                        <tr
+                          key={category.id}
+                          className="
+                            border-t border-[#F1E3D3]
+                            hover:bg-[#FCF8F3]
+                            transition-colors
+                          "
+                        >
+                          <td className="p-4 text-sm text-[#7A523B] font-medium">
+                            {(currentPage - 1) * 10 + index + 1}
+                          </td>
+
+                          <td className="p-4">
+                            <div>
+                              <p className="font-medium text-[#4B2E2B]">
+                                {category.name}
+                              </p>
+
+                              <p className="text-xs text-gray-500">
+                                Category #{(currentPage - 1) * 10 + index + 1}
+                              </p>
+                            </div>
+                          </td>
+
+                          <td className="p-4">
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() =>
+                                  handleEdit(category)
+                                }
+                                className="px-3 py-1 bg-yellow-500 text-white rounded"
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                onClick={() =>
+                                  handleDelete(category.id)
+                                }
+                                className="px-3 py-1 bg-red-600 text-white rounded"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+            </div> */}
+
+            {/* <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="bg-[#F8F4EE] border-b border-[#EADBC8]">
+                      <th className="p-4 text-left">
+                        Category
+                      </th>
+
+                      <th className="p-4 text-left">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {categories.map(
+                      (category, index) => (
+                        <tr
+                          key={category.id}
+                          className="
+                            border-t border-[#F1E3D3]
+                            hover:bg-[#FCF8F3]
+                            transition-colors
+                          "
+                        >
+                          <td className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className="
+                                  w-10 h-10
+                                  rounded-xl
+                                  bg-[#F1E3D3]
+                                  text-[#7A523B]
+                                  flex items-center
+                                  justify-center
+                                  font-semibold
+                                  text-sm
+                                "
+                              >
+                                {(currentPage - 1) * 10 + index + 1}
+                              </div>
+
+                              <div>
+                                <p className="font-medium text-[#4B2E2B]">
+                                  {category.name}
+                                </p>
+
+                                <p className="text-xs text-gray-500">
+                                  Menu category
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+
+                          <td className="p-4">
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() =>
+                                  handleEdit(category)
+                                }
+                                className="px-3 py-1 bg-yellow-500 text-white rounded"
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                onClick={() =>
+                                  handleDelete(category.id)
+                                }
+                                className="px-3 py-1 bg-red-600 text-white rounded"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+            </div> */}
+
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                <tr
+                  className="
+                    bg-[#E9DED2]
+                    border-b border-[#DCC5AF]
+                  "
+                >
+                    <th
+                      className="
+                        px-4 py-3
+                        text-left
+                        text-[#4B2E2B]
+                        font-semibold
+                      "
+                    >
+                      #
+                    </th>
+
+                    <th
+                      className="
+                        px-4 py-3
+                        text-left
+                        text-[#4B2E2B]
+                        font-semibold
+                      "
+                    >
+                      Category Name
+                    </th>
+
+                    <th
+                      className="
+                        px-4 py-3
+                        text-left
+                        text-[#4B2E2B]
+                        font-semibold
+                      "
+>
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {categories.map(
+                    (category, index) => (
+                      <tr
+                        key={category.id}
+                        className="
+                          border-t border-[#E9DED2]
+                          hover:bg-[#F6F4EE]
+                          transition-colors
+                        "
+                      >
+                        <td
+                          className="
+                            px-4 py-3
+                            text-[#7A523B]
+                            font-medium
+                          "
+                        >
+                          {(currentPage - 1) * 10 + index + 1}
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <span
+                            className="
+                              font-medium
+                              text-[#4B2E2B]
+                            "
+                          >
+                            {category.name}
+                          </span>
+                        </td>
+
+                        <td className="p-4">
+                          <div className="flex gap-2">
+                            <button
+                              className="
+                                px-3 py-2
+                                rounded-lg
+                                border border-[#E9DED2]
+                                bg-white
+                                text-[#4B2E2B]
+                                hover:bg-[#F6F4EE]
+                                transition-colors
+                              "
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              onClick={() => handleDelete(category.id)}
+                              className="
+                                px-3 py-2
+                                rounded-lg
+                                text-[#6B392F]
+                                hover:bg-[#F6F4EE]
+                                transition-colors
+                              "
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
             </div>
 
             {/* Pagination */}
@@ -369,7 +662,15 @@ export default function CategoryPage() {
                     currentPage - 1
                   )
                 }
-                className="px-4 py-2 border rounded-lg disabled:opacity-50"
+                className="
+                  px-4 py-2
+                  rounded-lg
+                  border border-[#E9DED2]
+                  bg-white
+                  text-[#4B2E2B]
+                  hover:bg-[#F6F4EE]
+                  disabled:opacity-50
+                "
               >
                 Previous
               </button>
@@ -389,7 +690,14 @@ export default function CategoryPage() {
                     currentPage + 1
                   )
                 }
-                className="px-4 py-2 border rounded-lg disabled:opacity-50"
+                className="px-4 py-2
+                  rounded-lg
+                  border border-[#E9DED2]
+                  bg-white
+                  text-[#4B2E2B]
+                  hover:bg-[#F6F4EE]
+                  disabled:opacity-50
+                "
               >
                 Next
               </button>
