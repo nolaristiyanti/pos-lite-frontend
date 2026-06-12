@@ -206,58 +206,66 @@ export default function CategoryPage() {
 
   if (error) {
     return (
-      <div className="p-6">
-        <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-4">
-          {error}
-        </div>
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600">
+        {error}
       </div>
     );
   }
-
+  
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       {/* Success Message */}
-
+  
       {successMessage && (
-        <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-xl">
+        <div className="rounded-2xl border border-green-200 bg-green-50 p-4 text-green-700">
           {successMessage}
         </div>
       )}
-
+  
       {/* Header */}
-
-      <div className="flex justify-between items-center">
+  
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-3xl font-semibold tracking-tight text-zinc-900">
             Category Management
           </h1>
-
-          <p className="text-gray-500">
+  
+          <p className="mt-1 text-sm text-zinc-500">
             Manage product categories
           </p>
         </div>
-
+  
         <button
           onClick={() => {
             setIsEditMode(false);
-          
+  
             setSelectedCategoryId(null);
-          
+  
             setFormData({
               name: "",
             });
-          
+  
             setShowModal(true);
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="
+            rounded-xl
+            bg-[#8B5A3C]
+            px-4
+            py-2.5
+            text-sm
+            font-medium
+            text-white
+            transition-all
+            hover:bg-[#72452B]
+          "
         >
           + Add Category
         </button>
       </div>
-
+  
       {/* Search */}
-
-      <div className="bg-white rounded-xl shadow p-4">
+  
+      <div className="rounded-3xl border border-[#ECE7E3] bg-white p-4 shadow-sm">
         <div className="flex gap-3">
           <input
             type="text"
@@ -265,378 +273,188 @@ export default function CategoryPage() {
             value={search}
             onChange={handleSearchChange}
             onKeyDown={handleSearchKeyDown}
-            className="flex-1 border rounded-lg px-4 py-2"
+            className="
+              flex-1
+              rounded-xl
+              border
+              border-[#ECE7E3]
+              px-4
+              py-2.5
+              outline-none
+              transition
+              focus:border-[#8B5A3C]
+            "
           />
-
+  
           <button
             onClick={handleSearchSubmit}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="
+              rounded-xl
+              bg-[#8B5A3C]
+              px-4
+              py-2.5
+              text-sm
+              font-medium
+              text-white
+              transition
+              hover:bg-[#72452B]
+            "
           >
             Search
           </button>
         </div>
       </div>
-
+  
       {/* Table */}
-
+  
       <div
         className="
-          bg-[#F6F4EE]
-          border border-[#E9DED2]
-          rounded-2xl
           overflow-hidden
+          rounded-3xl
+          border border-[#ECE7E3]
+          bg-white
+          shadow-sm
         "
       >
-        <div
+        {/* <div
           className="
-            flex justify-between items-center
-            px-5 py-4
-            bg-[#F6F4EE]
-            border-b border-[#E9DED2]
+            flex items-center justify-between
+            border-b border-[#ECE7E3]
+            bg-white
+            px-6 py-5
           "
         >
-          <h2
-            className="
-              font-semibold
-              text-[#4B2E2B]
-            "
-          >
+          <h2 className="font-semibold text-zinc-900">
             Category List
           </h2>
-
-          <span
-            className="
-              text-xs
-              font-medium
-              text-[#7A523B]
-            "
-          >
+  
+          <span className="text-sm text-zinc-500">
             {total} categories
           </span>
-        </div>
-
+        </div> */}
+  
         {categories.length === 0 ? (
-          <div className="p-10 text-center text-gray-500">
+          <div className="p-12 text-center text-zinc-500">
             No categories found
           </div>
         ) : (
           <>
-            {/* <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="p-4 text-left">
-                      #
-                    </th>
-
-                    <th className="p-4 text-left">
-                      Category Name
-                    </th>
-
-                    <th className="p-4 text-left">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {categories.map(
-                    (category, index) => (
-                      <tr
-                        key={category.id}
-                        className="border-t hover:bg-gray-50"
-                      >
-                        <td className="p-4">
-                          {(currentPage - 1) * 10 + index + 1}
-                        </td>
-
-                        <td className="p-4">
-                          {category.name}
-                        </td>
-
-                        <td className="p-4">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() =>
-                                handleEdit(category)
-                              }
-                              className="px-3 py-1 bg-yellow-500 text-white rounded"
-                            >
-                              Edit
-                            </button>
-
-                            <button
-                              onClick={() =>
-                                handleDelete(category.id)
-                              }
-                              className="px-3 py-1 bg-red-600 text-white rounded"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div> */}
-
-            {/* <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
-                  <thead>
-                    <tr className="bg-[#F8F4EE] border-b border-[#EADBC8]">
-                      <th className="p-4 text-left">
-                        #
-                      </th>
-
-                      <th className="p-4 text-left">
-                        Category Name
-                      </th>
-
-                      <th className="p-4 text-left">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {categories.map(
-                      (category, index) => (
-                        <tr
-                          key={category.id}
-                          className="
-                            border-t border-[#F1E3D3]
-                            hover:bg-[#FCF8F3]
-                            transition-colors
-                          "
-                        >
-                          <td className="p-4 text-sm text-[#7A523B] font-medium">
-                            {(currentPage - 1) * 10 + index + 1}
-                          </td>
-
-                          <td className="p-4">
-                            <div>
-                              <p className="font-medium text-[#4B2E2B]">
-                                {category.name}
-                              </p>
-
-                              <p className="text-xs text-gray-500">
-                                Category #{(currentPage - 1) * 10 + index + 1}
-                              </p>
-                            </div>
-                          </td>
-
-                          <td className="p-4">
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() =>
-                                  handleEdit(category)
-                                }
-                                className="px-3 py-1 bg-yellow-500 text-white rounded"
-                              >
-                                Edit
-                              </button>
-
-                              <button
-                                onClick={() =>
-                                  handleDelete(category.id)
-                                }
-                                className="px-3 py-1 bg-red-600 text-white rounded"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-            </div> */}
-
-            {/* <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
-                  <thead>
-                    <tr className="bg-[#F8F4EE] border-b border-[#EADBC8]">
-                      <th className="p-4 text-left">
-                        Category
-                      </th>
-
-                      <th className="p-4 text-left">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {categories.map(
-                      (category, index) => (
-                        <tr
-                          key={category.id}
-                          className="
-                            border-t border-[#F1E3D3]
-                            hover:bg-[#FCF8F3]
-                            transition-colors
-                          "
-                        >
-                          <td className="p-4">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className="
-                                  w-10 h-10
-                                  rounded-xl
-                                  bg-[#F1E3D3]
-                                  text-[#7A523B]
-                                  flex items-center
-                                  justify-center
-                                  font-semibold
-                                  text-sm
-                                "
-                              >
-                                {(currentPage - 1) * 10 + index + 1}
-                              </div>
-
-                              <div>
-                                <p className="font-medium text-[#4B2E2B]">
-                                  {category.name}
-                                </p>
-
-                                <p className="text-xs text-gray-500">
-                                  Menu category
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-
-                          <td className="p-4">
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() =>
-                                  handleEdit(category)
-                                }
-                                className="px-3 py-1 bg-yellow-500 text-white rounded"
-                              >
-                                Edit
-                              </button>
-
-                              <button
-                                onClick={() =>
-                                  handleDelete(category.id)
-                                }
-                                className="px-3 py-1 bg-red-600 text-white rounded"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-            </div> */}
-
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                <tr
-                  className="
-                    bg-[#E9DED2]
-                    border-b border-[#DCC5AF]
-                  "
-                >
+                  <tr
+                    className="
+                      border-b border-[#ECE7E3]
+                      bg-[#FAF6F2]
+                    "
+                  >
                     <th
                       className="
-                        px-4 py-3
+                        px-6 py-3
                         text-left
-                        text-[#4B2E2B]
-                        font-semibold
+                        text-xs
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        text-zinc-500
                       "
                     >
                       #
                     </th>
-
+  
                     <th
                       className="
-                        px-4 py-3
+                        px-6 py-3
                         text-left
-                        text-[#4B2E2B]
-                        font-semibold
+                        text-xs
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        text-zinc-500
                       "
                     >
                       Category Name
                     </th>
-
+  
                     <th
                       className="
-                        px-4 py-3
+                        px-6 py-3
                         text-left
-                        text-[#4B2E2B]
-                        font-semibold
+                        text-xs
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        text-zinc-500
                       "
->
+                    >
                       Actions
                     </th>
                   </tr>
                 </thead>
-
+  
                 <tbody>
                   {categories.map(
                     (category, index) => (
                       <tr
                         key={category.id}
                         className="
-                          border-t border-[#E9DED2]
-                          hover:bg-[#F6F4EE]
-                          transition-colors
+                          border-t border-[#F1F1F1]
+                          transition-all
+                          duration-150
+                          hover:bg-[#FCFBFA]
                         "
                       >
                         <td
                           className="
-                            px-4 py-3
-                            text-[#7A523B]
+                            px-6 py-3.5
+                            text-sm
                             font-medium
+                            text-zinc-500
                           "
                         >
-                          {(currentPage - 1) * 10 + index + 1}
+                          {(currentPage - 1) * 10 +
+                            index +
+                            1}
                         </td>
-
-                        <td className="px-4 py-3">
-                          <span
-                            className="
-                              font-medium
-                              text-[#4B2E2B]
-                            "
-                          >
+  
+                        <td className="px-6 py-3.5">
+                          <span className="text-sm font-medium text-zinc-900">
                             {category.name}
                           </span>
                         </td>
-
-                        <td className="p-4">
+  
+                        <td className="px-6 py-3.5">
                           <div className="flex gap-2">
+                          <button
+                            className="
+                              rounded-lg
+                              border border-[#E7E5E4]
+                              bg-[#FAF6F2]
+                              px-3 py-1.5
+                              text-xs
+                              font-semibold
+                              text-[#8B5A3C]
+                              transition-all
+                              hover:bg-[#F4E7DB]
+                              hover:border-[#D8B89C]
+                            "
+                          >
+                            Edit
+                          </button>
+  
                             <button
+                              onClick={() =>
+                                handleDelete(category.id)
+                              }
                               className="
-                                px-3 py-2
                                 rounded-lg
-                                border border-[#E9DED2]
-                                bg-white
-                                text-[#4B2E2B]
-                                hover:bg-[#F6F4EE]
-                                transition-colors
-                              "
-                            >
-                              Edit
-                            </button>
-
-                            <button
-                              onClick={() => handleDelete(category.id)}
-                              className="
-                                px-3 py-2
-                                rounded-lg
-                                text-[#6B392F]
-                                hover:bg-[#F6F4EE]
-                                transition-colors
+                                bg-red-50
+                                px-3 py-1.5
+                                text-xs
+                                font-semibold
+                                text-red-600
+                                transition-all
+                                hover:bg-red-100
                               "
                             >
                               Delete
@@ -649,53 +467,54 @@ export default function CategoryPage() {
                 </tbody>
               </table>
             </div>
-
+  
             {/* Pagination */}
-
-            <div className="flex justify-between items-center p-4 border-t">
+  
+            <div className="flex items-center justify-between border-t border-[#ECE7E3] p-4">
               <button
-                disabled={
-                  currentPage === 1
-                }
+                disabled={currentPage === 1}
                 onClick={() =>
-                  setCurrentPage(
-                    currentPage - 1
-                  )
+                  setCurrentPage(currentPage - 1)
                 }
                 className="
-                  px-4 py-2
-                  rounded-lg
-                  border border-[#E9DED2]
+                  rounded-xl
+                  border border-[#ECE7E3]
                   bg-white
-                  text-[#4B2E2B]
-                  hover:bg-[#F6F4EE]
+                  px-4 py-2
+                  text-sm
+                  font-medium
+                  text-zinc-700
+                  transition
+                  hover:border-[#D8B89C]
+                  hover:bg-[#FAF6F2]
                   disabled:opacity-50
                 "
               >
                 Previous
               </button>
-
-              <span>
-                Page {currentPage} of{" "}
-                {lastPage}
+  
+              <span className="text-sm text-zinc-500">
+                Page {currentPage} of {lastPage}
               </span>
-
+  
               <button
                 disabled={
-                  currentPage ===
-                  lastPage
+                  currentPage === lastPage
                 }
                 onClick={() =>
-                  setCurrentPage(
-                    currentPage + 1
-                  )
+                  setCurrentPage(currentPage + 1)
                 }
-                className="px-4 py-2
-                  rounded-lg
-                  border border-[#E9DED2]
+                className="
+                  rounded-xl
+                  border border-[#ECE7E3]
                   bg-white
-                  text-[#4B2E2B]
-                  hover:bg-[#F6F4EE]
+                  px-4 py-2
+                  text-sm
+                  font-medium
+                  text-zinc-700
+                  transition
+                  hover:border-[#D8B89C]
+                  hover:bg-[#FAF6F2]
                   disabled:opacity-50
                 "
               >
@@ -705,9 +524,9 @@ export default function CategoryPage() {
           </>
         )}
       </div>
-
+  
       {/* Modal */}
-
+  
       {showModal && (
         <CategoryFormModal
           title={
@@ -717,9 +536,7 @@ export default function CategoryPage() {
           }
           formData={formData}
           setFormData={setFormData}
-          onSubmit={
-            handleSubmitCategory
-          }
+          onSubmit={handleSubmitCategory}
           onClose={() =>
             setShowModal(false)
           }
