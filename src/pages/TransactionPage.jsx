@@ -46,8 +46,8 @@ export default function TransactionPage() {
   const [paymentFilter, setPaymentFilter,] = useState("");
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage, search);
+  }, [currentPage, search]);
   
   useEffect(() => {
     fetchTransactions(
@@ -80,7 +80,10 @@ export default function TransactionPage() {
       const response = await getProducts({
         page,
         search: searchTerm,
+        per_page: 12,
       });
+
+      console.log(response);
 
       setProducts(
         response.data.data || []
@@ -334,14 +337,23 @@ export default function TransactionPage() {
         {/* Cart Section */}
 
         <div className="lg:col-span-4">
-          <div className="rounded-xl border bg-white p-5 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
+          <div
+            className="
+              rounded-3xl
+              border
+              border-[#ECE7E3]
+              bg-white
+              p-6
+              shadow-sm
+            "
+          >
+            <div className="mb-6 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold">
-                  ☕ Shopping Cart
+                <h2 className="text-lg font-semibold text-[#18181B]">
+                  Shopping Cart
                 </h2>
 
-                <p className="text-sm text-gray-500">
+                <p className="mt-1 text-sm text-[#71717A]">
                   Review selected products
                 </p>
               </div>
@@ -349,60 +361,107 @@ export default function TransactionPage() {
               {cartItems.length > 0 && (
                 <button
                   onClick={clearCart}
-                  className="text-sm text-red-500 hover:text-red-700"
+                  className="
+                    rounded-xl
+                    bg-red-50
+                    px-3
+                    py-2
+                    text-sm
+                    font-medium
+                    text-red-600
+                    transition
+                    hover:bg-red-100
+                  "
                 >
-                  Clear
+                  Clear Cart
                 </button>
               )}
             </div>
 
             {cartItems.length === 0 ? (
-              <div className="py-8 text-center text-sm text-gray-500">
-                Cart is empty
+              <div className="py-12 text-center">
+                <p className="text-sm font-medium text-[#18181B]">
+                  Your cart is empty
+                </p>
+
+                <p className="mt-1 text-sm text-[#71717A]">
+                  Select products to start a transaction
+                </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="rounded-lg border p-3"
+                    className="
+                      rounded-2xl
+                      border
+                      border-[#ECE7E3]
+                      p-4
+                      transition
+                      hover:bg-[#FCFBFA]
+                    "
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-medium">
+                        <h3 className="font-medium text-[#18181B]">
                           {item.name}
                         </h3>
 
-                        <p className="text-sm text-gray-500">
+                        <p className="mt-1 text-sm text-[#71717A]">
                           Rp{" "}
-                          {Number(
-                            item.price
-                          ).toLocaleString("id-ID")}
+                          {Number(item.price).toLocaleString(
+                            "id-ID"
+                          )}
                         </p>
                       </div>
 
                       <button
-                        onClick={() =>
-                          removeItem(item.id)
-                        }
-                        className="text-sm text-red-500 hover:text-red-700"
+                        onClick={() => removeItem(item.id)}
+                        className="
+                          rounded-xl
+                          bg-red-50
+                          px-3
+                          py-1.5
+                          text-xs
+                          font-medium
+                          text-red-600
+                          transition
+                          hover:bg-red-100
+                        "
                       >
                         Remove
                       </button>
                     </div>
 
-                    <div className="mt-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                    <div className="mt-4 flex items-center justify-between">
+                      <div
+                        className="
+                          flex
+                          items-center
+                          overflow-hidden
+                          rounded-xl
+                          border
+                          border-[#ECE7E3]
+                        "
+                      >
                         <button
                           onClick={() =>
                             decreaseQty(item.id)
                           }
-                          className="h-8 w-8 rounded border"
+                          className="
+                            h-9
+                            w-9
+                            bg-[#FAF6F2]
+                            text-[#8B5A3C]
+                            transition
+                            hover:bg-[#F3ECE7]
+                          "
                         >
                           -
                         </button>
 
-                        <span className="w-8 text-center">
+                        <span className="w-10 text-center text-sm font-medium">
                           {item.quantity}
                         </span>
 
@@ -411,17 +470,25 @@ export default function TransactionPage() {
                             increaseQty(item.id)
                           }
                           disabled={
-                            item.quantity >=
-                            item.stock
+                            item.quantity >= item.stock
                           }
-                          className="h-8 w-8 rounded border disabled:bg-gray-100 disabled:text-gray-400"
+                          className="
+                            h-9
+                            w-9
+                            bg-[#FAF6F2]
+                            text-[#8B5A3C]
+                            transition
+                            hover:bg-[#F3ECE7]
+                            disabled:bg-gray-100
+                            disabled:text-gray-400
+                          "
                         >
                           +
                         </button>
                       </div>
 
                       <div className="text-right">
-                        <div className="font-medium">
+                        <div className="font-semibold text-[#18181B]">
                           Rp{" "}
                           {(
                             Number(item.price) *
@@ -429,7 +496,7 @@ export default function TransactionPage() {
                           ).toLocaleString("id-ID")}
                         </div>
 
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-[#71717A]">
                           Subtotal
                         </div>
                       </div>
@@ -437,35 +504,43 @@ export default function TransactionPage() {
                   </div>
                 ))}
 
-                <div className="border-t pt-4">
-                  <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-                    <div className="mb-4">
-                      <h3 className="text-lg font-semibold text-amber-900">
-                        ☕ Current Order
+                <div className="border-t border-[#ECE7E3] pt-5">
+                  <div
+                    className="
+                      rounded-3xl
+                      border
+                      border-[#ECE7E3]
+                      bg-[#FAF6F2]
+                      p-5
+                    "
+                  >
+                    <div className="mb-5">
+                      <h3 className="text-lg font-semibold text-[#18181B]">
+                        Current Order
                       </h3>
 
-                      <p className="text-sm text-amber-700">
+                      <p className="mt-1 text-sm text-[#71717A]">
                         Review order before checkout
                       </p>
                     </div>
 
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">
+                        <span className="text-[#71717A]">
                           Total Items
                         </span>
 
-                        <span className="font-medium">
+                        <span className="font-medium text-[#18181B]">
                           {totalQuantity}
                         </span>
                       </div>
 
                       <div className="flex justify-between">
-                        <span className="text-gray-600">
+                        <span className="text-[#71717A]">
                           Subtotal
                         </span>
 
-                        <span className="font-medium">
+                        <span className="font-medium text-[#18181B]">
                           Rp{" "}
                           {cartTotal.toLocaleString(
                             "id-ID"
@@ -474,14 +549,22 @@ export default function TransactionPage() {
                       </div>
                     </div>
 
-                    <div className="my-4 border-t border-amber-200"></div>
+                    <div className="my-5 border-t border-[#E6D8CD]" />
 
-                    <div className="rounded-lg border bg-white p-4">
-                      <p className="mb-1 text-xs uppercase tracking-wide text-gray-500">
+                    <div
+                      className="
+                        rounded-2xl
+                        border
+                        border-[#ECE7E3]
+                        bg-white
+                        p-5
+                      "
+                    >
+                      <p className="text-xs uppercase tracking-[0.15em] text-[#71717A]">
                         Total Payment
                       </p>
 
-                      <p className="text-3xl font-bold text-amber-700">
+                      <p className="mt-2 text-3xl font-bold text-[#8B5A3C]">
                         Rp{" "}
                         {cartTotal.toLocaleString(
                           "id-ID"
@@ -491,7 +574,7 @@ export default function TransactionPage() {
                   </div>
 
                   <div className="mt-5">
-                    <label className="mb-2 block text-sm font-medium">
+                    <label className="mb-2 block text-sm font-medium text-[#18181B]">
                       Payment Method
                     </label>
 
@@ -502,7 +585,17 @@ export default function TransactionPage() {
                           e.target.value
                         )
                       }
-                      className="w-full rounded-lg border px-3 py-2"
+                      className="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-[#ECE7E3]
+                        px-4
+                        py-3
+                        outline-none
+                        transition
+                        focus:border-[#8B5A3C]
+                      "
                     >
                       <option value="cash">
                         Cash
@@ -524,7 +617,21 @@ export default function TransactionPage() {
                       cartItems.length === 0 ||
                       checkoutLoading
                     }
-                    className="mt-5 w-full rounded-lg bg-green-600 px-4 py-3 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+                    className="
+                      mt-5
+                      w-full
+                      rounded-2xl
+                      bg-[#8B5A3C]
+                      px-4
+                      py-3.5
+                      text-sm
+                      font-medium
+                      text-white
+                      transition-all
+                      hover:bg-[#72452B]
+                      disabled:cursor-not-allowed
+                      disabled:bg-gray-300
+                    "
                   >
                     {checkoutLoading
                       ? "Processing..."
@@ -539,156 +646,277 @@ export default function TransactionPage() {
         {/* Product Catalog Section */}
 
         <div className="lg:col-span-8">
-          <div className="rounded-xl border bg-white p-5 shadow-md">
-            <div className="mb-5">
-              <h2 className="text-lg font-semibold">
-                Product Catalog
-              </h2>
+        <div
+  className="
+    rounded-3xl
+    border
+    border-[#ECE7E3]
+    bg-white
+    p-6
+    shadow-sm
+  "
+>
+  <div className="mb-6">
+    <h2 className="text-lg font-semibold text-[#18181B]">
+      Product Catalog
+    </h2>
 
-              <p className="text-sm text-gray-500">
-                Search and add products to cart
-              </p>
-            </div>
+    <p className="mt-1 text-sm text-[#71717A]">
+      Search and add products to cart
+    </p>
+  </div>
 
-            <div className="mb-5">
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={search}
-                onChange={(e) => {
-                  setCurrentPage(1);
-                  setSearch(e.target.value);
-                }}
-                className="w-full rounded-lg border px-4 py-2"
-              />
-            </div>
+  <div
+    className="
+      mb-6
+      rounded-2xl
+      border
+      border-[#ECE7E3]
+      bg-[#FCFBFA]
+      p-4
+    "
+  >
+    <input
+      type="text"
+      placeholder="Search products..."
+      value={search}
+      onChange={(e) => {
+        setCurrentPage(1);
+        setSearch(e.target.value);
+      }}
+      className="
+        w-full
+        rounded-2xl
+        border
+        border-[#ECE7E3]
+        px-4
+        py-3
+        outline-none
+        transition
+        focus:border-[#8B5A3C]
+      "
+    />
+  </div>
 
-            {loading && (
-              <div className="rounded-xl border p-6">
-                Loading products...
-              </div>
-            )}
+  {loading && (
+    <div
+      className="
+        rounded-2xl
+        border
+        border-[#ECE7E3]
+        bg-[#FCFBFA]
+        p-10
+        text-center
+        text-[#71717A]
+      "
+    >
+      Loading products...
+    </div>
+  )}
 
-            {!loading &&
-              products.length === 0 && (
-                <div className="rounded-xl border p-6 text-center text-gray-500">
-                  No products available.
+  {!loading && products.length === 0 && (
+    <div
+      className="
+        rounded-2xl
+        border
+        border-[#ECE7E3]
+        bg-[#FCFBFA]
+        p-10
+        text-center
+      "
+    >
+      <p className="font-medium text-[#18181B]">
+        No products found
+      </p>
+
+      <p className="mt-1 text-sm text-[#71717A]">
+        Try another search keyword
+      </p>
+    </div>
+  )}
+
+  {!loading && products.length > 0 && (
+    <>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {products.map((product) => {
+          const cartItem = cartItems.find(
+            (item) => item.id === product.id
+          );
+
+          const quantityInCart =
+            cartItem?.quantity || 0;
+
+          const stockReached =
+            quantityInCart >= product.stock;
+
+          return (
+            <div
+              key={product.id}
+              className="
+                rounded-2xl
+                border
+                border-[#ECE7E3]
+                bg-white
+                p-5
+                transition-all
+                duration-200
+                hover:-translate-y-1
+                hover:border-[#DCC5AF]
+              "
+            >
+              <div className="flex h-full flex-col">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#18181B]">
+                    {product.name}
+                  </h3>
+
+                  <p className="mt-2 line-clamp-2 text-sm text-[#71717A]">
+                    {product.description ||
+                      "No description available"}
+                  </p>
+
+                  <div className="mt-4">
+                    <p className="text-2xl font-bold text-[#8B5A3C]">
+                      Rp{" "}
+                      {Number(
+                        product.price
+                      ).toLocaleString("id-ID")}
+                    </p>
+                  </div>
+
+                  <div className="mt-4">
+                    {product.stock > 0 ? (
+                      <span
+                        className="
+                          inline-flex
+                          rounded-full
+                          bg-[#FAF6F2]
+                          px-3
+                          py-1
+                          text-xs
+                          font-medium
+                          text-[#8B5A3C]
+                        "
+                      >
+                        Stock: {product.stock}
+                      </span>
+                    ) : (
+                      <span
+                        className="
+                          inline-flex
+                          rounded-full
+                          bg-red-50
+                          px-3
+                          py-1
+                          text-xs
+                          font-medium
+                          text-red-600
+                        "
+                      >
+                        Out of Stock
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
 
-            {!loading &&
-              products.length > 0 && (
-                <>
-                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {products.map((product) => {
-                      const cartItem =
-                        cartItems.find(
-                          (item) =>
-                            item.id === product.id
-                        );
+                <button
+                  onClick={() =>
+                    addToCart(product)
+                  }
+                  disabled={
+                    product.stock <= 0 ||
+                    stockReached
+                  }
+                  className="
+                    mt-5
+                    w-full
+                    rounded-2xl
+                    bg-[#8B5A3C]
+                    px-4
+                    py-3
+                    text-sm
+                    font-medium
+                    text-white
+                    transition-all
+                    hover:bg-[#72452B]
+                    disabled:cursor-not-allowed
+                    disabled:bg-gray-300
+                  "
+                >
+                  {stockReached
+                    ? "Stock Limit Reached"
+                    : "Add to Cart"}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
-                      const quantityInCart =
-                        cartItem?.quantity || 0;
+      <div className="mt-8 flex items-center justify-center gap-3">
+        <button
+          onClick={() =>
+            setCurrentPage((prev) =>
+              Math.max(prev - 1, 1)
+            )
+          }
+          disabled={currentPage === 1}
+          className="
+            rounded-xl
+            border
+            border-[#ECE7E3]
+            bg-white
+            px-4
+            py-2
+            text-sm
+            transition
+            hover:bg-[#FAF6F2]
+            disabled:opacity-50
+          "
+        >
+          Previous
+        </button>
 
-                      const stockReached =
-                        quantityInCart >=
-                        product.stock;
+        <div
+          className="
+            rounded-xl
+            bg-[#FAF6F2]
+            px-4
+            py-2
+            text-sm
+            font-medium
+            text-[#8B5A3C]
+          "
+        >
+          Page {currentPage} of {lastPage}
+        </div>
 
-                      return (
-                        <div
-                          key={product.id}
-                          className="rounded-xl border p-4"
-                        >
-                          <div className="space-y-2">
-                            <h3 className="font-semibold">
-                              {product.name}
-                            </h3>
-
-                            <p className="text-sm text-gray-500">
-                              {product.description ||
-                                "No description"}
-                            </p>
-
-                            <div className="text-lg font-bold text-blue-600">
-                              Rp{" "}
-                              {Number(
-                                product.price
-                              ).toLocaleString(
-                                "id-ID"
-                              )}
-                            </div>
-
-                            <div>
-                              {product.stock > 0 ? (
-                                <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                                  Stock:{" "}
-                                  {product.stock}
-                                </span>
-                              ) : (
-                                <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
-                                  Out of Stock
-                                </span>
-                              )}
-                            </div>
-
-                            <button
-                              onClick={() =>
-                                addToCart(product)
-                              }
-                              disabled={
-                                product.stock <= 0 ||
-                                stockReached
-                              }
-                              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-300"
-                            >
-                              {stockReached
-                                ? "Stock Limit Reached"
-                                : "Add To Cart"}
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-center gap-2">
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) =>
-                          Math.max(prev - 1, 1)
-                        )
-                      }
-                      disabled={currentPage === 1}
-                      className="rounded border px-3 py-2 disabled:bg-gray-100"
-                    >
-                      Prev
-                    </button>
-
-                    <span>
-                      Page {currentPage} of{" "}
-                      {lastPage}
-                    </span>
-
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) =>
-                          Math.min(
-                            prev + 1,
-                            lastPage
-                          )
-                        )
-                      }
-                      disabled={
-                        currentPage === lastPage
-                      }
-                      className="rounded border px-3 py-2 disabled:bg-gray-100"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </>
-              )}
-          </div>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) =>
+              Math.min(prev + 1, lastPage)
+            )
+          }
+          disabled={currentPage === lastPage}
+          className="
+            rounded-xl
+            border
+            border-[#ECE7E3]
+            bg-white
+            px-4
+            py-2
+            text-sm
+            transition
+            hover:bg-[#FAF6F2]
+            disabled:opacity-50
+          "
+        >
+          Next
+        </button>
+      </div>
+    </>
+  )}
+</div>
         </div>
       </div>
 

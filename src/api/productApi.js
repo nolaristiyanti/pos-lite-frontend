@@ -1,14 +1,8 @@
 import axiosInstance from "./axios";
 
-export const getProducts = async ({
-  page = 1,
-  search = "",
-} = {}) => {
+export const getProducts = async (params = {}) => {
   const response = await axiosInstance.get("/products", {
-    params: {
-      page,
-      search,
-    },
+    params,
   });
 
   return response.data;
