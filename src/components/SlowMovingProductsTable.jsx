@@ -1,138 +1,165 @@
 import { TrendingDown } from "lucide-react";
 
 const getBadgeStyle = (
-    totalSold
-  ) => {
-    const sold = Number(totalSold);
-  
-    if (sold === 0) {
-      return `
-        bg-red-50
-        text-red-700
-      `;
-    }
-  
-    if (sold <= 2) {
-      return `
-        bg-orange-50
-        text-orange-700
-      `;
-    }
-  
-    return `
-      bg-yellow-50
-      text-yellow-700
-    `;
-  };
-  
-  const getBadgeLabel = (
-    totalSold
-  ) => {
-    const sold = Number(totalSold);
-  
-    if (sold === 0) {
-      return "No Sales";
-    }
-  
-    return `${sold} sold`;
-  };
-  
-  const SlowMovingProductsTable = ({
-    products,
-  }) => {
-    const noSalesCount =
-      products.filter(
-        (product) =>
-          product.total_sold === 0
-      ).length;
-  
-    return (
-      <div className="rounded-2xl
-        border border-[#E8D7C5]
-        bg-white
-        p-6
-        shadow-sm">
-        <div className="mb-4">
-            <div className="flex items-center gap-2">
-                <TrendingDown
-                    size={18}
-                    className="text-orange-500"
-                />
+  totalSold
+) => {
+  const sold =
+    Number(totalSold);
 
-                <h2 className="text-lg font-semibold text-[#4B2E2B]">
-                    Slow Moving Products
-                </h2>
-            </div>
-  
-            {/* <p className="text-sm text-[#8A7A6A]">
-                Lowest-performing products during the selected period
-            </p> */}
+  if (sold === 0) {
+    return `
+      bg-red-50
+      text-red-600
+    `;
+  }
+
+  if (sold <= 2) {
+    return `
+      bg-amber-50
+      text-amber-700
+    `;
+  }
+
+  return `
+    bg-[#FAF6F2]
+    text-[#8B5A3C]
+  `;
+};
+
+const getBadgeLabel = (
+  totalSold
+) => {
+  const sold =
+    Number(totalSold);
+
+  if (sold === 0) {
+    return "No Sales";
+  }
+
+  return `${sold} sold`;
+};
+
+const SlowMovingProductsTable = ({
+  products,
+}) => {
+  const noSalesCount =
+    products.filter(
+      (product) =>
+        product.total_sold === 0
+    ).length;
+
+  return (
+    <div
+      className="
+        rounded-3xl
+        border border-[#ECE7E3]
+        bg-white
+        shadow-sm
+      "
+    >
+      <div className="border-b border-[#ECE7E3] p-6">
+        <div className="flex items-center gap-3">
+          <div
+            className="
+              flex h-10 w-10 items-center justify-center
+              rounded-2xl
+              bg-[#FAF6F2]
+            "
+          >
+            <TrendingDown
+              size={18}
+              className="text-[#8B5A3C]"
+            />
+          </div>
+
+          <div>
+            <h2 className="text-lg font-semibold text-[#18181B]">
+              Slow Moving Products
+            </h2>
+
+            <p className="text-sm text-[#71717A]">
+              Products with the lowest sales performance
+            </p>
+          </div>
         </div>
-  
-        {products.length === 0 ? (
-          <p className="text-[#8A7A6A]">
-            No sales data available
+      </div>
+
+      {products.length === 0 ? (
+        <div className="p-10 text-center">
+          <p className="text-sm text-[#71717A]">
+            No sales data available.
           </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr
-                    className="border-b bg-[#FAF7F3] border-[#ECE3D8]"
-                >
-                  <th className="px-4 py-3 text-left text-[#4B2E2B]">
-                    Product
-                  </th>
-  
-                  <th className="px-4 py-3 text-right text-[#4B2E2B]">
-                    Sales
-                  </th>
-                </tr>
-              </thead>
-  
-              <tbody>
-                {products.map(
-                  (product) => (
-                    <tr
-                      key={
-                        product.product_id
-                      }
-                      className="border-b border-[#F5EEE6] transition-colors hover:bg-[#FCFAF8]"
-                    >
-                      <td className="px-4 py-3 font-medium text-[#4B2E2B]">
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr
+                className="
+                  border-b border-[#ECE7E3]
+                  bg-[#FAF6F2]
+                "
+              >
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#71717A] uppercase tracking-wide">
+                  Product
+                </th>
+
+                <th className="px-6 py-4 text-right text-sm font-semibold text-[#71717A] uppercase tracking-wide">
+                  Performance
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {products.map(
+                (product) => (
+                  <tr
+                    key={
+                      product.product_id
+                    }
+                    className="
+                      border-b border-[#ECE7E3]
+                      transition-colors
+                      hover:bg-[#FCFBFA]
+                      last:border-b-0
+                    "
+                  >
+                    <td className="px-6 py-4">
+                      <span className="font-medium text-[#18181B]">
                         {
                           product.product_name
                         }
-                      </td>
-  
-                      <td className="px-4 py-3 text-right">
-                        <span
-                          className={`
-                            inline-flex
-                            rounded-full
-                            px-3
-                            py-1
-                            text-sm
-                            font-semibold
-                            ${getBadgeStyle(
-                              product.total_sold
-                            )}
-                          `}
-                        >
-                          {getBadgeLabel(
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 text-right">
+                      <span
+                        className={`
+                          inline-flex
+                          rounded-full
+                          px-3
+                          py-1
+                          text-sm
+                          font-medium
+                          ${getBadgeStyle(
                             product.total_sold
                           )}
-                        </span>
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    );
-  };
-  
-  export default SlowMovingProductsTable;
+                        `}
+                      >
+                        {getBadgeLabel(
+                          product.total_sold
+                        )}
+                      </span>
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SlowMovingProductsTable;

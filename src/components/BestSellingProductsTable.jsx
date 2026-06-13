@@ -1,4 +1,4 @@
-import { Award, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 const getRankDisplay = (rank) => {
   switch (rank) {
@@ -13,52 +13,70 @@ const getRankDisplay = (rank) => {
   }
 };
 
-const getRowStyle = () => "";
-
 const BestSellingProductsTable = ({
   products,
 }) => {
   return (
-    <div className="rounded-2xl
-        border border-[#E8D7C5]
+    <div
+      className="
+        rounded-3xl
+        border border-[#ECE7E3]
         bg-white
-        p-6
-        shadow-sm">
-      <div className="mb-4">
-        <div className="flex items-center gap-2">
-          <Trophy
-            size={18}
-            className="text-amber-500"
-          />
+        shadow-sm
+      "
+    >
+      <div className="border-b border-[#ECE7E3] p-6">
+        <div className="flex items-center gap-3">
+          <div
+            className="
+              flex h-10 w-10 items-center justify-center
+              rounded-2xl
+              bg-[#FAF6F2]
+            "
+          >
+            <Trophy
+              size={18}
+              className="text-[#8B5A3C]"
+            />
+          </div>
 
-          <h2 className="text-lg font-semibold text-[#4B2E2B]">
-            Best Selling Products
-          </h2>
+          <div>
+            <h2 className="text-lg font-semibold text-[#18181B]">
+              Best Selling Products
+            </h2>
+
+            <p className="text-sm text-[#71717A]">
+              Top performing products during the selected period
+            </p>
+          </div>
         </div>
-
-        {/* <p className="text-sm text-[#8A7A6A]">
-          Top performers during the selected period
-        </p> */}
       </div>
 
       {products.length === 0 ? (
-        <p className="text-[#8A7A6A]">
-          No sales data available
-        </p>
+        <div className="p-10 text-center">
+          <p className="text-sm text-[#71717A]">
+            No sales data available.
+          </p>
+        </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
+          <table className="w-full">
             <thead>
-              <tr className="border-b bg-[#FAF7F3] border-[#ECE3D8]">
-                <th className="w-20 px-4 py-3 text-left text-[#4B2E2B]">
-                  #
+              <tr
+                className="
+                  border-b border-[#ECE7E3]
+                  bg-[#FAF6F2]
+                "
+              >
+                <th className="w-24 px-6 py-4 text-left text-sm font-semibold text-[#71717A] uppercase tracking-wide">
+                  Rank
                 </th>
 
-                <th className="px-4 py-3 text-left text-[#4B2E2B]">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#71717A] uppercase tracking-wide">
                   Product
                 </th>
 
-                <th className="px-4 py-3 text-right text-[#4B2E2B]">
+                <th className="px-6 py-4 text-right text-sm font-semibold text-[#71717A] uppercase tracking-wide">
                   Sales
                 </th>
               </tr>
@@ -67,57 +85,70 @@ const BestSellingProductsTable = ({
             <tbody>
               {products.map(
                 (product, index) => {
-                  const rank = index + 1;
+                  const rank =
+                    index + 1;
 
                   return (
                     <tr
+                      key={
+                        product.id ??
+                        index
+                      }
                       className="
-                        border-b border-[#F5EEE6] transition-colors hover:bg-[#FCFAF8]
+                        border-b border-[#ECE7E3]
+                        transition-colors
+                        hover:bg-[#FCFBFA]
+                        last:border-b-0
                       "
                     >
-                      <td className="px-4 py-3">
+                      <td className="px-6 py-4">
                         {rank <= 3 ? (
                           <span className="text-xl">
-                            {getRankDisplay(rank)}
+                            {getRankDisplay(
+                              rank
+                            )}
                           </span>
                         ) : (
-                          <span
+                          <div
                             className="
-                              inline-flex
-                              h-8
-                              w-8
-                              items-center
-                              justify-center
+                              flex h-9 w-9 items-center justify-center
                               rounded-full
-                              bg-[#F8F4EE]
-                              dtext-[#7A523B]
+                              bg-[#FAF6F2]
                               text-sm
                               font-semibold
+                              text-[#8B5A3C]
                             "
                           >
                             {rank}
-                          </span>
+                          </div>
                         )}
                       </td>
 
-                      <td className="px-4 py-3 font-medium text-[#4B2E2B]">
-                        {product.product_name}
+                      <td className="px-6 py-4">
+                        <span className="font-medium text-[#18181B]">
+                          {
+                            product.product_name
+                          }
+                        </span>
                       </td>
 
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-6 py-4 text-right">
                         <span
                           className="
                             inline-flex
                             rounded-full
-                            bg-[#F8F4EE]
+                            bg-[#FAF6F2]
                             px-3
                             py-1
                             text-sm
-                            font-semibold
-                            text-[#7A523B]
+                            font-medium
+                            text-[#8B5A3C]
                           "
                         >
-                          {product.total_sold} sold
+                          {
+                            product.total_sold
+                          }{" "}
+                          sold
                         </span>
                       </td>
                     </tr>

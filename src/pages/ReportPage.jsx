@@ -176,7 +176,11 @@ const ReportPage = () => {
   if (error) {
     return (
       <div className="p-6">
-        <div className="rounded-lg bg-red-100 p-4 text-red-700">
+        <div className="
+            rounded-3xl
+            border
+            border-red-200
+            bg-white p-4 text-red-700">
           {error}
         </div>
       </div>
@@ -184,16 +188,16 @@ const ReportPage = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 bg-[#F8F6F4] p-6">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[#4B2E2B]">
-              Sales Reports
-            </h2>
+            <h1 className="text-3xl font-bold tracking-tight text-[#18181B]">
+              Reports
+            </h1>
 
-            <p className="mt-1 text-sm text-[#8A7A6A]">
-              Filter sales performance by date range
+            <p className="mt-1 text-sm text-[#71717A]">
+              Monitor sales performance and inventory insights.
             </p>
           </div>
 
@@ -264,22 +268,14 @@ const ReportPage = () => {
         />
       </div>
 
-      <div className="flex items-center gap-4 py-2">
-        <div className="h-px flex-1 bg-[#E8D7C5]" />
+      <div className="space-y-1">
+        <h2 className="text-xl font-semibold text-[#18181B]">
+          Inventory Analytics
+        </h2>
 
-        <span
-          className="
-            text-xs
-            font-semibold
-            uppercase
-            tracking-[0.2em]
-            text-[#B89D83]
-          "
-        >
-          Inventory Monitoring
-        </span>
-
-        <div className="h-px flex-1 bg-[#E8D7C5]" />
+        <p className="text-sm text-[#71717A]">
+          Monitor stock availability and inventory health.
+        </p>
       </div>
 
       <div className="space-y-6">
@@ -311,6 +307,7 @@ const ReportPage = () => {
           }
         />
       </div>
+      
     </div>
   );
 };
